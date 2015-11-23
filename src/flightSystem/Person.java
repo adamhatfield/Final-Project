@@ -59,13 +59,21 @@ public abstract class Person {
 	public void setZipCode(int newZipCode){
 		zipCode = newZipCode;
 	}
-	
+	//Returns the state of residence
 	public String getState(){
 		return state;
 	}
-	
+	//Sets the state of residence
 	public void setState(String newState){
 		state = newState;
+	}
+	//Return a person social security number
+	public int getSSN(){
+		return ssn;
+	}
+	//Sets a persons ssn
+	public void setSSN(int newSSN){
+		ssn = newSSN;
 	}
 
 }
