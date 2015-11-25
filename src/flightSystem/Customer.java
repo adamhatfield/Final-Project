@@ -4,7 +4,7 @@ package flightSystem;
  * This class creates a customer constructor for a flight booking system
  * Customers have a first name, last name, ssn, address, state of residence, zip, email ,username, password, and security question and answer
  * Customers can book flights, view flights, and remove flights previously booked
- * @author Arson
+ * @author Adam Hatfield
  *
  */
 
@@ -33,6 +33,27 @@ public class Customer extends Person {
 		this.password = newPassword;
 		
 	}
+	//Method that returns username
+	public String getUserName(){
+		return userName;
+	}
+	//Method that resets the user name of a customer
+	public void setUserName(String newUserName){
+		this.userName = newUserName;
+	}
+	//Method that resets a users password for the account
+	public void setPassword(String newPassword){
+		this.password = newPassword;
+	}
+	//Method that returns a customers email address
+	public String getEmailAddress(){
+		return emailAddress;
+	}
+	//Method that allows a user to change their email address
+	public void setEmailAddress(String newEmailAddress){
+		
+	}
+	
 	
 	
 
