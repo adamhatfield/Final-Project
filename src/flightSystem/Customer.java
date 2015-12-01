@@ -14,13 +14,13 @@ public class Customer extends Person {
 	private String emailAddress;
 	private String securityQuestion;
 	private String securityQuestionAnswer;
-	private String account;
+	private int accountNumber;
 	
-	//Default no-arg Constructor
+	/**Default no-arg Constructor*/
 	public Customer(){
 		
 	}
-	//Creates a customer objects with specified name, address, social security number, username and password
+	/**Creates a customer objects with specified name, address, social security number, username and password*/
 	public Customer(String newFirstName,String newLastName, int newSSN, String newAddress, String newState, int newZipCode, String newUserName,
 			String newPassword){
 		super.setFirstName(newFirstName);
@@ -33,26 +33,47 @@ public class Customer extends Person {
 		this.password = newPassword;
 		
 	}
-	//Method that returns username
+	/**Method that returns username*/
 	public String getUserName(){
 		return userName;
 	}
-	//Method that resets the user name of a customer
+	/**Method that resets the user name of a customer*/
 	public void setUserName(String newUserName){
 		this.userName = newUserName;
 	}
-	//Method that resets a users password for the account
+	/**Method that resets a users password for the account*/
 	public void setPassword(String newPassword){
 		this.password = newPassword;
 	}
-	//Method that returns a customers email address
+	/**Method that returns a customers email address*/
 	public String getEmailAddress(){
 		return emailAddress;
 	}
-	//Method that allows a user to change their email address
+	/**Method that allows a user to change their email address*/
 	public void setEmailAddress(String newEmailAddress){
-		
+		this.emailAddress = newEmailAddress;
 	}
+	/**Set a new security question*/
+	public void setSecurityQuestion(String newSecurityQuestion){
+		securityQuestion = newSecurityQuestion;
+	}
+	/**Getter for security question*/
+	public String getSecurityQuestion(){
+		return securityQuestion;
+	}
+	/**Setter for security question answer*/
+	public void setSecurityQuestionAnswer(String newSecurityQuestionAnswer){
+		this.securityQuestionAnswer = newSecurityQuestionAnswer;
+	}
+	/**Getter for security question answer*/
+	public String getSecurityQuestionAnswer(){
+		return securityQuestionAnswer;
+	}
+	/**Getter for account number*/
+	public int getAccountNumber(){
+		return accountNumber;
+	}
+	
 	
 	
 	
