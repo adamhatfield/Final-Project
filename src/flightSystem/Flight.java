@@ -1,21 +1,56 @@
 package flightSystem;
 
-public class Flight {
-	private int flightNumber;
-	private int flightCapacity;
-	private String flightDestination;
-	private java.util.Date flightDate;
-	private String flightOrigin;
-	private double flightTime;
-	private double flightCost;
-	
-	/**Default no-arg constructor*/
-	public Flight(){
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+
+public class flight {
+	int flightNumber ;
+	int flightCapacity =100;
+	int onFlight=0;
+	String flightDestination ;
+	String flightStartPoint;
+
+	//Calendar flightDate;
+	GregorianCalendar flightDate; //thing should go into interface for use by admin
+	Time flightDuration;  //same
+	double flightCost; //same
+	static int numOfFlights=0;
+	flight(){
+		numOfFlights++;
+		flightNumber=999;
+		flightDestination= "NoWhere";
+		flightStartPoint="NoStart";
+		flightDuration= new Time(1,1,0);
+		flightDate= new GregorianCalendar(1,1,1,1,1);
+		flightCost=1000.99;
 		
 	}
-	
-	public Flight(int newFlightNumber, int newFlightCapacity, String newDestination, String newOrigin, double newFlightTime, double newFlightCost){
+	flight(int flightNum,int flightCap, String destination, String start, GregorianCalendar date, Time duration, double cost){
+		numOfFlights++;
+		flightNumber=flightNum;
+		flightCapacity=flightCap;
+		flightDestination=destination;
+		flightStartPoint=start;
+		flightDate=date;
+		flightDuration=duration;
+		flightCost=cost;
+		
 		
 	}
+	/*int getFlightNumber(){
+		return this.flightNumber;
+	}
+	void setFlightNumber(int num){
+		this.flightNumber =num;
+	}
+	int getFlightCapacity(){
+		return this.flightCapacity;
+	}
+	void setFlightCapcity(int num){
+		 this.flightCapacity=num;
+		
+	}	*/
+	
 
 }
