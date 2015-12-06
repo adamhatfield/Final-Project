@@ -3,8 +3,8 @@ import java.sql.*;
 public class Database { 
 	private  String url = "jdbc:mysql://localhost:3306/java";
 	
-	private String user = "java";
-	private String password = "password";
+	private String user = "admin";
+	private String password = "Arson8629";
 	
 	public Database(){
 		intializeDB();
@@ -15,8 +15,8 @@ public class Database {
 			//Load JDBC driver
 			Class.forName("com.mysql.jdbc.Driver");
 			//Establish connection
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/java","java","password");
-			System.out.println("Connected");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/flightsystem",user,password);
+			System.out.println("Connection established");
 		}catch(Exception e){
 			System.out.println("Error in connecting to Database");
 		}
