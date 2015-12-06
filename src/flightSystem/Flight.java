@@ -4,7 +4,7 @@ import java.sql.Time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class flight {
+public class Flight {
 	int flightNumber ;
 	int flightCapacity =100;
 	int onFlight=0;
@@ -16,7 +16,7 @@ public class flight {
 	Time flightDuration;  //same
 	double flightCost; //same
 	static int numOfFlights=0;
-	flight(){
+	Flight(){
 		numOfFlights++;
 		flightNumber=999;
 		flightDestination= "NoWhere";
@@ -26,7 +26,7 @@ public class flight {
 		flightCost=1000.99;
 		
 	}
-	flight(int flightNum,int flightCap, String destination, String start, GregorianCalendar date, Time duration, double cost){
+	Flight(int flightNum,int flightCap, String destination, String start, GregorianCalendar date, Time duration, double cost){
 		numOfFlights++;
 		flightNumber=flightNum;
 		flightCapacity=flightCap;
