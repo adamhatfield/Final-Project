@@ -1,39 +1,46 @@
 package flightSystem;
 import java.sql.*;
-public class Database { 
-	private  String url = "jdbc:mysql://localhost:3306/java";
+public interface Database { 
+	  String url = "jdbc:mysql://localhost:3306/java";
 	
-	private String user = "admin";
-	private String password = "Arson8629";
+	 String user = "admin";
+	 String password = "Arson8629";
 	
-	public Database(){
-		intializeDB();
-	}
 	
-	private void intializeDB (){
+	
+	/**Initialize Database connection*/
+	default void initializeDB (){
 		try{
 			//Load JDBC driver
 			Class.forName("com.mysql.jdbc.Driver");
 			//Establish connection
 			Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/flightsystem",user,password);
-			System.out.println("Connection established");
+			
+			
 		}catch(Exception e){
 			System.out.println("Error in connecting to Database");
 		}
 	}
-	
-	
-	public static void main(String[] args) throws SQLException, ClassNotFoundException{
+	/**Add new user into database*/
+	default void insertNewUser(String userName, String password, String emailAddress, String firstName, String lastName, String address, String city, String state, 
+			String zip, String ssn, String securityQuestion, String answer){
+		
+		/**Query that adds a user to the Customer table*/
+		String query = "INSERT INTO CUSTOMER(CusUserName,CusPassword,CusEmailAddress,CusFirstName,CustLastName,"
+				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer) VALUE("+userName+","+password+","+emailAddress+","
+				+firstName+","+lastName+","+address+","+city+","+state+","+zip+","+ssn+","+securityQuestion+","+answer+")";
+		try{
+			Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1:3306/flightsystem",user,password);
+			Statement s = connection.createStatement();
+			s.execute(query);
+			 
 			
-			Database db = new Database();
-		
-		
-		
-		
-		
-		
-		
-		
+		}catch(Exception e){
+			
+		}
 	}
+	
+	
+
 
 }
