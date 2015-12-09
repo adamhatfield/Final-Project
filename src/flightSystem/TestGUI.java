@@ -3,7 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
-
+import javax.swing.text.NumberFormatter;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -15,13 +15,18 @@ import java.awt.CardLayout;
 import java.awt.GridLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
+
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 import java.awt.Component;
 import java.sql.*;
+import java.text.NumberFormat;
+
+import javax.swing.JInternalFrame;
+import javax.swing.JFormattedTextField;
+import javax.swing.JPasswordField;
 
 public class TestGUI extends JFrame implements Database {
-	private JTextField textField;
-	private JTextField textField_1;
 	private JPanel panelLogin;
 	private JPanel panelNewUser;
 	private JPanel panelUserView;
@@ -31,12 +36,27 @@ public class TestGUI extends JFrame implements Database {
 	private JTextField jtfLastName;
 	private JTextField jtfStreetAddress;
 	private JTextField jtfState;
-	private JTextField jtfZipCode;
+	private JFormattedTextField jtfZipCode;
 	private JTextField jtfSsn;
 	private JTextField jtfEnterSecurityQuestion;
 	private JTextField jtfSecurityQuestionAnswer;
 	private JTextField jtfEmailAddress;
 	private JTextField jtfCity;
+	private JLabel lblZipCode;
+	private JLabel lblUserName;
+	private JLabel lblPassword_1;
+	private JLabel lblEmailAddress_1;
+	private JLabel lblFirstName;
+	private JLabel lblLastName;
+	private JLabel lblStreetAddress;
+	private JLabel lblCity;
+	private JLabel lblState;
+	private JLabel lblSsn;
+	private JLabel lblSecuritQuestion;
+	private JLabel lblAnswer;
+	private JButton btnLogout;
+	private JTextField textField;
+	private JPasswordField passwordField;
 	
 	
 	public TestGUI() {
@@ -46,54 +66,67 @@ public class TestGUI extends JFrame implements Database {
 		getContentPane().setLayout(new CardLayout(0, 0));
 		/**Login Panel*/
 		final JPanel panelLogin = new JPanel();
-		getContentPane().add(panelLogin, "name_25928878208141");
+		getContentPane().add(panelLogin, "Login Window");
 		panelLogin.setLayout(null);
-		panelLogin.setVisible(true);
 		
 		/** New User Screen*/
 		final JPanel panelNewUser = new JPanel();
-		getContentPane().add(panelNewUser, "name_25947135937202");
+		getContentPane().add(panelNewUser, "New User Window");
 		panelNewUser.setLayout(null);
 		panelNewUser.setVisible(false);
 		
-		/**User view*/
+		/**Main Menu*/
 		final JPanel panelUserView = new JPanel();
-		getContentPane().add(panelUserView, "name_25940417847003");
+		getContentPane().add(panelUserView, "Main Menu");
+		panelUserView.setLayout(null);
 		
-		JMenuItem mntmFlights = new JMenuItem("Search Flights");
-		panelUserView.add(mntmFlights);
-		
-		JMenuItem mntmBookedFlights = new JMenuItem("Booked Flights");
-		panelUserView.add(mntmBookedFlights);
-		
-		JMenuItem mntmMyAccount = new JMenuItem("My Account");
-		panelUserView.add(mntmMyAccount);
-		panelUserView.setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{mntmFlights, mntmBookedFlights, mntmMyAccount}));
+		/**Logout button for main menu, returns user to login window*/
+		btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelUserView.setVisible(false);
+				panelLogin.setVisible(true);
+			}
+		});
+		btnLogout.setBounds(390, 19, 117, 29);
+		panelUserView.add(btnLogout);
 		panelUserView.setVisible(false);
 		
 		/**Email Address text field for login window*/
-		JLabel lblEmailAddress = new JLabel("Email Address");
+		JLabel lblEmailAddress = new JLabel("User Name");
 		lblEmailAddress.setBounds(27, 50, 113, 16);
 		panelLogin.add(lblEmailAddress);
+		
 		textField = new JTextField();
-		textField.setBounds(25, 65, 130, 26);
+		textField.setBounds(10, 65, 130, 26);
 		panelLogin.add(textField);
 		textField.setColumns(10);
 		
+		/**Password text field for login window*/
 		JLabel lblPassword = new JLabel("Password");
 		lblPassword.setBounds(27, 103, 61, 16);
 		panelLogin.add(lblPassword);
+		/**Password text field*/
+		passwordField = new JPasswordField();
+		passwordField.setBounds(10, 120, 130, 26);
+		panelLogin.add(passwordField);
 		
-		textField_1 = new JTextField();
-		textField_1.setBounds(25, 131, 130, 26);
-		panelLogin.add(textField_1);
-		textField_1.setColumns(10);
 		/**Ok button and listener*/
 		JButton btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelUserView.setVisible(true);
-				panelLogin.setVisible(false);
+				
+				String userName = textField.getText();
+				String password = passwordField.getText();
+				System.out.println(userName+ " " +password);
+				
+				if(login(userName,password)){
+					panelUserView.setVisible(true);
+					panelLogin.setVisible(false);
+				}else{
+					JOptionPane.showMessageDialog(null, "Check username and password");
+				}
+				
 				
 			}
 		});
@@ -116,6 +149,8 @@ public class TestGUI extends JFrame implements Database {
 		});
 		btnCreateAccount.setBounds(373, 75, 130, 29);
 		panelLogin.add(btnCreateAccount);
+		
+		
 	
 		
 		/**Registration page label*/
@@ -128,107 +163,159 @@ public class TestGUI extends JFrame implements Database {
 		lblNewUserInfo.setBounds(27, 33, 260, 16);
 		panelNewUser.add(lblNewUserInfo);
 		
-		
+		/**User name text field*/
 		jtfUserName = new JTextField();
 		jtfUserName.setBounds(26, 53, 130, 26);
-		jtfUserName.setText("User Name");
 		panelNewUser.add(jtfUserName);
 		jtfUserName.setColumns(10);
-		
+		/**Password text field*/
 		jtfPassword = new JTextField();
-		jtfPassword.setText("Password");
 		jtfPassword.setBounds(26, 83, 130, 26);
 		panelNewUser.add(jtfPassword);
 		jtfPassword.setColumns(10);
-		
+		/**FirstName text field*/
 		jtfFirstName = new JTextField();
-		jtfFirstName.setText("First Name");
 		jtfFirstName.setBounds(26, 150, 130, 26);
 		panelNewUser.add(jtfFirstName);
 		jtfFirstName.setColumns(10);
-		
+		/**Last Name Text field*/
 		jtfLastName = new JTextField();
-		jtfLastName.setText("Last Name");
 		jtfLastName.setBounds(26, 177, 130, 26);
 		panelNewUser.add(jtfLastName);
 		jtfLastName.setColumns(10);
-		
+		/**Street Address Text Field*/
 		jtfStreetAddress = new JTextField();
-		jtfStreetAddress.setText("Street Address");
 		jtfStreetAddress.setBounds(26, 204, 130, 26);
 		panelNewUser.add(jtfStreetAddress);
 		jtfStreetAddress.setColumns(10);
-		
+		/**City Text Field*/
 		jtfCity = new JTextField();
-		jtfCity.setText("City");
 		jtfCity.setBounds(26, 228, 130, 26);
 		panelNewUser.add(jtfCity);
 		jtfCity.setColumns(10);
-		
+		/**State Text Field*/
 		jtfState = new JTextField();
-		jtfState .setText("State");
 		jtfState .setBounds(27, 254, 130, 26);
 		panelNewUser.add(jtfState);
 		jtfState .setColumns(10);
-		
-		jtfZipCode  = new JTextField();
-		jtfZipCode.setText("Zip Code");
+		/**ZipCode Text Field*/
+		jtfZipCode  = new JFormattedTextField();
 		jtfZipCode.setBounds(27, 281, 130, 26);
 		panelNewUser.add(jtfZipCode);
 		jtfZipCode.setColumns(10);
-		
+		/**SSN text field*/
 		jtfSsn = new JTextField();
-		jtfSsn.setText("SSN");
 		jtfSsn.setBounds(27, 308, 130, 26);
 		panelNewUser.add(jtfSsn);
 		jtfSsn.setColumns(10);
-		
+		/**Security Question Text Field*/
 		jtfEnterSecurityQuestion = new JTextField();
-		jtfEnterSecurityQuestion.setText("Enter Security Question");
 		jtfEnterSecurityQuestion.setBounds(27, 336, 348, 26);
 		panelNewUser.add(jtfEnterSecurityQuestion);
 		jtfEnterSecurityQuestion.setColumns(10);
-		
+		/**Security Question Answer TextField*/
 		jtfSecurityQuestionAnswer = new JTextField();
-		jtfSecurityQuestionAnswer.setText("Security Question Answer");
 		jtfSecurityQuestionAnswer.setBounds(27, 363, 178, 26);
 		panelNewUser.add(jtfSecurityQuestionAnswer);
 		jtfSecurityQuestionAnswer.setColumns(10);
-		
+		/**Email Address Text Field*/
 		jtfEmailAddress = new JTextField();
-		jtfEmailAddress.setText("Email Address");
 		jtfEmailAddress.setBounds(26, 112, 130, 26);
 		panelNewUser.add(jtfEmailAddress);
 		jtfEmailAddress.setColumns(10);
-		
+		/**
+		 * Action Listener for create account button
+		 * Takes all text fields and converts value to string
+		 * Invokes the insertNewUser method from database interface to add user to database
+		 */
 		JButton createNewUser = new JButton("Create Account");
 		createNewUser.addActionListener(new ActionListener() {
-			String firstName = jtfFirstName.getText();
-			String LastName = jtfLastName.getText();
-			String userName = jtfUserName.getText();
-			String password = jtfPassword.getText();
-			String emailAddress = jtfEmailAddress.getText();
-			String securityAnswer = jtfSecurityQuestionAnswer.getText();
-			String securityQuestion = jtfEnterSecurityQuestion.getText();
-			String address = jtfStreetAddress.getText();
-			String city = jtfCity.getText();
-			String state = jtfState.getText();
-			String zip = jtfZipCode.getText();
-			String SSN = jtfSsn.getText();
+			
 			public void actionPerformed(ActionEvent e) {
+				int accountNumber =(int) (1000 + Math.random() * 9000);
+				String firstName = jtfFirstName.getText();
+				String LastName = jtfLastName.getText();
+				String userName = jtfUserName.getText();
+				String password = jtfPassword.getText();
+				String emailAddress = jtfEmailAddress.getText();
+				String securityAnswer = jtfSecurityQuestionAnswer.getText();
+				String securityQuestion = jtfEnterSecurityQuestion.getText();
+				String address = jtfStreetAddress.getText();
+				String city = jtfCity.getText();
+				String state = jtfState.getText();
+				String zip = jtfZipCode.getText();
+				String SSN = jtfSsn.getText();
 				
-				insertNewUser(firstName,LastName,userName,password,emailAddress,securityAnswer,securityQuestion,address,city,state,zip,SSN);
-				
+				insertNewUser(accountNumber,userName,password,emailAddress,firstName,LastName,address,city,state,zip,SSN,securityQuestion,securityAnswer);
+				panelNewUser.setVisible(false);
+				panelUserView.setVisible(true);
 			}
 		});
 		createNewUser.setBounds(383, 377, 130, 29);
 		panelNewUser.add(createNewUser);
+		
+		lblZipCode = new JLabel("Zip Code");
+		lblZipCode.setBounds(160, 286, 61, 16);
+		panelNewUser.add(lblZipCode);
+		
+		lblUserName = new JLabel("User Name");
+		lblUserName.setBounds(160, 58, 73, 16);
+		panelNewUser.add(lblUserName);
+		
+		lblPassword_1 = new JLabel("Password");
+		lblPassword_1.setBounds(160, 88, 61, 16);
+		panelNewUser.add(lblPassword_1);
+		
+		lblEmailAddress_1 = new JLabel("Email Address");
+		lblEmailAddress_1.setBounds(160, 117, 101, 16);
+		panelNewUser.add(lblEmailAddress_1);
+		
+		lblFirstName = new JLabel("First Name");
+		lblFirstName.setBounds(160, 155, 73, 16);
+		panelNewUser.add(lblFirstName);
+		
+		lblLastName = new JLabel("Last Name");
+		lblLastName.setBounds(160, 182, 73, 16);
+		panelNewUser.add(lblLastName);
+		
+		lblStreetAddress = new JLabel("Street Address");
+		lblStreetAddress.setBounds(160, 209, 91, 16);
+		panelNewUser.add(lblStreetAddress);
+		
+		lblCity = new JLabel("City");
+		lblCity.setBounds(160, 233, 61, 16);
+		panelNewUser.add(lblCity);
+		
+		lblState = new JLabel("State");
+		lblState.setBounds(160, 259, 61, 16);
+		panelNewUser.add(lblState);
+		
+		lblSsn = new JLabel("SSN");
+		lblSsn.setBounds(160, 313, 61, 16);
+		panelNewUser.add(lblSsn);
+		
+		lblSecuritQuestion = new JLabel("Security Question");
+		lblSecuritQuestion.setBounds(387, 336, 126, 16);
+		panelNewUser.add(lblSecuritQuestion);
+		
+		lblAnswer = new JLabel("Answer");
+		lblAnswer.setBounds(215, 368, 61, 16);
+		panelNewUser.add(lblAnswer);
+		
+		/**Back button for new user page, takes back to login window*/
+		JButton btnNewButton = new JButton("Back");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelNewUser.setVisible(false);
+				panelLogin.setVisible(true);
+			}
+		});
+		btnNewButton.setBounds(23, 388, 117, 29);
+		panelNewUser.add(btnNewButton);
 		
 		JPanel panelUserInfo = new JPanel();
 		getContentPane().add(panelUserInfo, "name_33387852169015");
 		
 		
 	}
-	
-	
 }
