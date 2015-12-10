@@ -57,6 +57,9 @@ public class TestGUI extends JFrame implements Database {
 	private JButton btnLogout;
 	private JTextField textField;
 	private JPasswordField passwordField;
+	private JPanel panelPasswordReset;
+	private JTextField textField_1;
+	protected Customer customer = new Customer();
 	
 	
 	public TestGUI() {
@@ -86,11 +89,13 @@ public class TestGUI extends JFrame implements Database {
 			public void actionPerformed(ActionEvent e) {
 				panelUserView.setVisible(false);
 				panelLogin.setVisible(true);
+				
 			}
 		});
 		btnLogout.setBounds(390, 19, 117, 29);
 		panelUserView.add(btnLogout);
 		panelUserView.setVisible(false);
+		
 		
 		/**Email Address text field for login window*/
 		JLabel lblEmailAddress = new JLabel("User Name");
@@ -130,8 +135,10 @@ public class TestGUI extends JFrame implements Database {
 				
 			}
 		});
-		btnOk.setBounds(27, 169, 117, 29);
+		btnOk.setBounds(10, 158, 117, 29);
 		panelLogin.add(btnOk);
+		
+		
 		
 		/**New User Label*/
 		JLabel lblNewUsers = new JLabel("New Users");
@@ -149,6 +156,20 @@ public class TestGUI extends JFrame implements Database {
 		});
 		btnCreateAccount.setBounds(373, 75, 130, 29);
 		panelLogin.add(btnCreateAccount);
+		
+		JButton btnResetPassword = new JButton("Reset Password");
+		btnResetPassword.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelPasswordReset.setVisible(true);
+				panelLogin.setVisible(false);
+			}
+		});
+		btnResetPassword.setBounds(373, 142, 130, 29);
+		panelLogin.add(btnResetPassword);
+		
+		JLabel lblForgotPassword = new JLabel("Forgot Password");
+		lblForgotPassword.setBounds(383, 125, 108, 16);
+		panelLogin.add(lblForgotPassword);
 		
 		
 	
@@ -246,7 +267,8 @@ public class TestGUI extends JFrame implements Database {
 				String zip = jtfZipCode.getText();
 				String SSN = jtfSsn.getText();
 				
-				insertNewUser(accountNumber,userName,password,emailAddress,firstName,LastName,address,city,state,zip,SSN,securityQuestion,securityAnswer);
+				Customer c = new Customer(accountNumber,userName,password,emailAddress,firstName,LastName,address,city,state,zip,SSN,securityQuestion,securityAnswer);
+				insertNewUser(c);
 				panelNewUser.setVisible(false);
 				panelUserView.setVisible(true);
 			}
@@ -313,8 +335,71 @@ public class TestGUI extends JFrame implements Database {
 		btnNewButton.setBounds(23, 388, 117, 29);
 		panelNewUser.add(btnNewButton);
 		
-		JPanel panelUserInfo = new JPanel();
-		getContentPane().add(panelUserInfo, "name_33387852169015");
+		panelPasswordReset = new JPanel();
+		getContentPane().add(panelPasswordReset, "name_19672340689757");
+		panelPasswordReset.setLayout(null);
+		
+		JLabel lblEnterYouPassword = new JLabel("Enter your Username:");
+		lblEnterYouPassword.setBounds(38, 87, 168, 16);
+		panelPasswordReset.add(lblEnterYouPassword);
+		
+		textField_1 = new JTextField();
+		textField_1.setBounds(38, 109, 168, 26);
+		panelPasswordReset.add(textField_1);
+		textField_1.setColumns(10);
+		/**
+		 * Button and action listerner for reset password.
+		 * When user hits view security question a pop window appears with the matching security question to their account
+		 * 
+		 * If the username does not match any in the database the application prompts the user with a pop window
+		 * asking them to check their username
+		 * 
+		 * If the user does not input the right answer to their security question a pop up window appears asking them to 
+		 * check their answer to the question.
+		 */
+		JButton btnViewSecurityQuestion = new JButton("View Security Question");
+		btnViewSecurityQuestion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String userName = textField_1.getText();
+				
+					try{
+						customer = new Customer(getCustomerInfo(userName));
+						if(customer.getUserName().equals(userName)){
+							String answer = JOptionPane.showInputDialog( customer.getSecurityQuestion());
+							if(customer.getSecurityQuestionAnswer().equals(answer)){
+								String updatedPassword = JOptionPane.showInputDialog("Enter a new password:");
+								customer.setPassword(updatedPassword);
+								updatePassword(customer.getUserName(),updatedPassword );
+								JOptionPane.showMessageDialog(null, "Your password has been changed.");
+								panelPasswordReset.setVisible(false);
+								panelLogin.setVisible(true);
+								
+								
+							}else{
+								JOptionPane.showMessageDialog(null, "Check answer to security question,");
+							}
+						}else{
+							JOptionPane.showMessageDialog(null, "No user with that specific username was found.");
+						}
+						
+						
+						
+						
+						
+						
+						
+					}catch(NullPointerException n){
+						System.out.println("No user found:");
+					}catch(Exception e1){
+						e1.printStackTrace();
+					}
+			}
+				
+				
+			
+		});
+		btnViewSecurityQuestion.setBounds(38, 147, 168, 29);
+		panelPasswordReset.add(btnViewSecurityQuestion);
 		
 		
 	}
