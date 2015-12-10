@@ -1,18 +1,12 @@
 package flightSystem;
 import java.sql.*;
-
-import javax.swing.JOptionPane;
-
-
 public interface Database { 
 	  
 	
 	 String user = "admin";
 	 String password = "Arson8629";
+	 String databaseCommit = "COMMIT";
 	 
-	 
-	
-	
 	/**Initialize Database connection*/
 	default void initializeDB (){
 		try{
@@ -28,25 +22,28 @@ public interface Database {
 	}
 	
 	/**Add new user into database*/
-	default void insertNewUser(int accountNumber,String userName, String password, String emailAddress, String firstName, String lastName, String address, String city, String state, 
-			String zip, String ssn, String securityQuestion, String answer){
+	default void insertNewUser(Customer customer){
 		
 			
 		/**Query that adds a user to the Customer table*/
 		String query = "INSERT INTO CUSTOMER(CusAccountNumber,CusUserName,CusPassword,CusEmailAddress,CusFirstName,CusLastName,"
-				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer) VALUE('"+accountNumber+"','"+userName+"','"+password+"','"+emailAddress+"','"
-				+firstName+"','"+lastName+"','"+address+"','"+city+"','"+state+"','"+zip+"','"+ssn+"','"+securityQuestion+"','"+answer+"')";
+				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer) VALUE('"+customer.getAccountNumber()+"','"+customer.getUserName()+"','"+customer.getPassword()+"','"
+				+customer.getEmailAddress()+"','"+customer.getFirstName()+"','"+customer.getLastName()+"','"+customer.getAddress()+"','"+customer.getCity()+"','"
+				+customer.getState()+"','"+customer.getZipCode()+"','"+customer.getSSN()+"','"+customer.getSecurityQuestion()+"','"+customer.getSecurityQuestionAnswer()+"')";
 		try{
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem","admin","Arson8629");
 			Statement s = connection.createStatement();
 			s.executeUpdate(query);
+			s.executeQuery(databaseCommit);
 			 
 			
 		}catch(Exception e){
 			e.printStackTrace();
 		}
 	}
-	/**Method that logs user in flight system main menu*/
+	
+	
+	/**Method that logs user into flight system main menu*/
 	default boolean login(String userName, String password){
 		/**Query that checks database for username and password based on textfield entry*/
 		String query = "select CusUserName, CusPassword from Customer where Customer.CusUserName = '"+userName+"' and Customer.CusPassword = '"+password+"'";
@@ -71,6 +68,63 @@ public interface Database {
 		return false;
 		
 	}
+	
+
+	
+	/**Method that loads all user info in to customer object
+	 * This gui methods then use this object to perform tasks or access other methods.
+	 * If null is returned there is no matching username in the database.
+	 * @param userName
+	 * @return
+	 */
+	default Customer getCustomerInfo(String userName) throws Exception{
+		Customer c = new Customer();
+		
+		String query = "SELECT CusAccountNumber,CusUserName,CusPassword,CusEmailAddress,CusFirstName,CusLastName,"
+				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer FROM Customer WHERE Customer.CusUserName ='"+userName+"'";
+		
+		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem","admin","Arson8629");
+		Statement stmt = connection.createStatement();
+		ResultSet customer = stmt.executeQuery(query);
+		while(customer.next()){
+			int accountNumber = customer.getInt(1);
+			String cusUserName = customer.getString(2);
+			String cusPassword = customer.getString(3);
+			String cusEmail = customer.getString(4);
+			String firstName = customer.getString(5);
+			String lastName = customer.getString(6);
+			String address = customer.getString(7);
+			String city = customer.getString(8);
+			String state = customer.getString(9);
+			String zip = customer.getString(10);
+			String ssn = customer.getString(11);
+			String securityQuestion = customer.getString(12);
+			String answer = customer.getString(13);
+			
+			 c = new Customer(accountNumber, cusUserName, cusPassword, cusEmail, firstName, lastName, address, city, state, zip, ssn, securityQuestion, answer);
+			 
+		}
+		return c;
+		
+	}
+	
+	default void updatePassword(String userName, String password){
+		String query = "UPDATE Customer SET CusPassword ='"+password+ "' WHERE Customer.CusUserName = '" +userName+"'";
+		try{
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem","admin","Arson8629");
+			Statement s = connection.createStatement();
+			s.executeUpdate(query);
+			s.executeQuery(databaseCommit);
+			 
+			
+		}catch(Exception e){
+			e.printStackTrace();
+		
+	}
+	}
+	
+	
+	
 	
 	
 
