@@ -8,7 +8,7 @@ package flightSystem;
  *
  */
 
-public class Customer extends Person {
+public class Customer extends Person implements Database {
 	private String userName;
 	private String password;
 	private String emailAddress;
@@ -20,17 +20,88 @@ public class Customer extends Person {
 	public Customer(){
 		
 	}
-	/**Creates a customer objects with specified name, address, social security number, username and password*/
-	public Customer(String newFirstName,String newLastName, int newSSN, String newAddress, String newState, int newZipCode, String newUserName,
-			String newPassword){
+	/**Creates a customer objects with specified name, address, social security number, username and password
+	 * For the new user tab
+	 * */
+	public Customer(String newUserName,String newPassword,String newEmailAddress,String newFirstName,String newLastName,String newAddress,
+			String newCity,String newState, String newZipCode, String newSSN,String newSecurityQuestion,String newSecurityAnswer){
 		super.setFirstName(newFirstName);
 		super.setLastName(newLastName);
 		super.setSSN(newSSN);
 		super.setAddress(newAddress);
 		super.setZipCode(newZipCode);
-		super.setZipCode(newZipCode);
+		super.setCity(newCity);
+		super.setState(newState);
 		this.userName = newUserName;
 		this.password = newPassword;
+		this.emailAddress = newEmailAddress;
+		this.accountNumber = (int) (1000 + Math.random() * 9000);
+
+	}
+	/**
+	 * Creates customer object copy from existing object. 
+	 * @param newAccountNumber
+	 * @param newUserName
+	 * @param newPassword
+	 * @param newEmailAddress
+	 * @param newFirstName
+	 * @param newLastName
+	 * @param newAddress
+	 * @param newCity
+	 * @param newState
+	 * @param newZipCode
+	 * @param newSSN
+	 * @param newSecurityQuestion
+	 * @param newSecurityAnswer
+	 */
+	public Customer(Customer c){
+		super.setFirstName(c.getFirstName());
+		super.setLastName(c.getLastName());
+		super.setSSN(c.getSSN());
+		super.setAddress(c.getAddress());
+		super.setZipCode(c.getZipCode());
+		super.setCity(c.getCity());
+		super.setState(c.getState());
+		this.userName = c.getUserName();
+		this.password = c.getPassword();
+		this.emailAddress = c.getEmailAddress();
+		this.accountNumber = c.getAccountNumber();
+		this.securityQuestion = c.getSecurityQuestion();
+		this.securityQuestionAnswer = c.getSecurityQuestionAnswer();
+		
+	}
+	/**
+	 * Creates customer object from outputs of database. System holds this object until the customer logouts.
+	 * @param newAccountNumber
+	 * @param newUserName
+	 * @param newPassword
+	 * @param newEmailAddress
+	 * @param newFirstName
+	 * @param newLastName
+	 * @param newAddress
+	 * @param newCity
+	 * @param newState
+	 * @param newZipCode
+	 * @param newSSN
+	 * @param newSecurityQuestion
+	 * @param newSecurityAnswer
+	 */
+	
+	public Customer(int newAccountNumber,String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, String newCity, String newState, String newZip,String newSSN,String newSecurityQuestion,
+			String newAnswer){
+		super.setFirstName(newFirstName);
+		super.setLastName(newLastName);
+		super.setSSN(newSSN);
+		super.setAddress(newAddress);
+		super.setZipCode(newZip);
+		super.setCity(newCity);
+		super.setState(newState);
+		this.userName = newUserName;
+		this.password = newPassword;
+		this.emailAddress = newEmail;
+		this.accountNumber = newAccountNumber;
+		this.securityQuestion = newSecurityQuestion;
+		this.securityQuestionAnswer = newAnswer;
 		
 	}
 	/**Method that returns username*/
@@ -40,6 +111,9 @@ public class Customer extends Person {
 	/**Method that resets the user name of a customer*/
 	public void setUserName(String newUserName){
 		this.userName = newUserName;
+	}
+	protected String getPassword(){
+		return password;
 	}
 	/**Method that resets a users password for the account*/
 	public void setPassword(String newPassword){
@@ -73,6 +147,12 @@ public class Customer extends Person {
 	public int getAccountNumber(){
 		return accountNumber;
 	}
+	
+	public void customerString( Customer c){
+		System.out.println(c.getAccountNumber()+ " \n"+c.getUserName()+" \n"+c.getPassword()+"\n"+c.getEmailAddress()+" \n"+c.getFirstName()+"\n"
+				+c.getLastName()+" \n"+c.getAddress()+"\n"+c.getCity()+"\n"+c.getState()+"\n"+c.getSecurityQuestion()+"\n"+c.getSecurityQuestionAnswer()+"\n"+c.getSSN());
+	}
+	
 	
 	
 	
