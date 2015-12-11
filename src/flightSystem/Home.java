@@ -1,11 +1,10 @@
 package flightSystem;
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.util.Scanner;
 import java.sql.*;
 
 public class Home implements Database{
-	public static void main(String[] args){
+	public static void main(String[] args)
+			throws SQLException, ClassNotFoundException {
 		
 		System.out.println("Login");
 		System.out.println("Book Flight");
@@ -17,11 +16,11 @@ public class Home implements Database{
 		
 		System.out.println("You are in the booking flights menu\n");
 		System.out.println("From");//must be city
-		String From = input.nextLine(); //scans full string
+		String from = input.nextLine(); //scans full string
 		System.out.println("To");//must be city
-		String To = input.nextLine();
-		System.out.println("Depart Date");//format mm//dd//year
-		String Date = input.nextLine();
+		String to = input.nextLine();
+		System.out.println("Depart Date");//format yyyy-mm-dd
+		String date = input.nextLine();
 		//need to add return date to database
 	//	System.out.println("Return Date");
 	//	String Return = input.nextLine();
@@ -30,7 +29,12 @@ public class Home implements Database{
 		// press ok button
 		
 		//method find available flight
+		
+		
 		//void findFlight(String from, String to, String date, String retur, int passenger){
+		
+		
+		
 			//need to go to database
 			//String query = "select FlightStartPoint, FlightDestination, FlightDate"
 		String user = "root";
@@ -44,7 +48,62 @@ public class Home implements Database{
 				System.out.println("Database Connected");
 				
 				Statement statement = connection.createStatement();
-				ResultSet
+				/*
+				 * ResultSet finds planes that fit customer schedule
+				 * From here now you only need to display
+				 */
+				ResultSet resultSet = statement.executeQuery
+						("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, FlightCapacity, OnFlight, FlightDuration"
+								+ ", FlightTime, FlightNumber FROM flight "
+								+ "WHERE FlightStartPoint ='"+ from+"' AND FlightDestination ='"+to+"' AND FlightDate ='"+date+"'");
+				boolean worked=false; //for if get a null because no current flight match requirement
+				int choose;
+				while(resultSet.next()){
+				worked=true;//didnt get null
+				int c =resultSet.getInt(5);
+				int o =resultSet.getInt(6);
+				int remain=c-o;
+			//gui button action here subbing it right now with scanner
+				//System.out.println("Click on Flight you want");//or enter in flight number
+				
+				
+				System.out.println("Flight#\tCost\tTickets#\tFlight Time\tFlight Duration\tFlight Date");
+				System.out.println(resultSet.getInt(9)+"\t"+resultSet.getDouble(2)+"\t"+remain+"\t"+resultSet.getTime(8)+"\t"+resultSet.getTime(7)+""
+						+ "\t"+resultSet.getDate(4));
+				}
+				if(worked==false){
+					System.out.println("Sorry not flight is available that meets your requirements");
+					} // GOOD SPOT TO GO BACK TO HOME PAGE BUTTON OR MAKE VISIBLE
+				else {
+				System.out.println("Enter in flight number you want");
+				boolean x=true;
+				while(x){ //loops into valid flightNUm is entered in
+					choose =input.nextInt();
+					resultSet=statement.executeQuery("SELECT FlightNumber FROM FLIGHT WHERE FlightNumber ="+choose);
+					while(resultSet.next())
+					x=false; //only can get here if valid flight number
+					
+					} }
+			
+				 //may come back and spit this method right HERE ***************** for second method below to work
+				// above method would need to return choose 
+				//and new passenger count on ticket
+				
+				//*********METHOD TO CHECK IF ADD TO FLIGHT IS POSSIBLE
+				ResultSet resultSet1=statement.executeQuery("SELECT OnFlight,FlightCapacity from flight WHERE FlightNumber ="+choose);
+				while(resultSet1.next())
+				if(resultSet1.getInt(1)+passengers<=resultSet1.getInt(2)){
+					int mod=resultSet1.getInt(1)+passengers;
+					statement.execute("UPDATE FLIGHT SET OnFlight ="+mod+" WHERE FlightNumber ="+choose);
+						
+				}
+				else
+				{
+					System.out.println("Flight is at full capacity"); //Go back to home
+				}
+				
+				
+				
 		}
 		
 		
