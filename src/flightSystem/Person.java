@@ -12,19 +12,21 @@ public abstract class Person {
 	private String address;
 	private int zipCode;
 	private String state;
+	private String city;
 	private int ssn;
 	//Default Person constructor
 	public Person(){
 		
 	}
 	
-	public Person(String newFirstName, String newLastName, String newAddress, int newZipCode, String newState, int newSSN){
+	public Person(String newFirstName, String newLastName, String newAddress, int newZipCode, String newState, String newCity, int newSSN){
 		firstName = newFirstName;
 		lastName = newLastName;
 		address = newAddress;
 		zipCode = newZipCode;
 		state = newState;
 		ssn = newSSN;
+		city = newCity;
 	}
 	//Returns the first name of a person
 	public String getFirstName(){
@@ -72,8 +74,15 @@ public abstract class Person {
 		return ssn;
 	}
 	//Sets a persons ssn
-	public void setSSN(int newSSN){
+	public void setSSN( int newSSN){
 		ssn = newSSN;
+	}
+	
+	public String getCity(){
+		return city;
+	}
+	public void setCity(String newCity){
+		city = newCity;
 	}
 
 }
