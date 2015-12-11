@@ -96,8 +96,8 @@ public interface Database {
 			String address = customer.getString(7);
 			String city = customer.getString(8);
 			String state = customer.getString(9);
-			String zip = customer.getString(10);
-			String ssn = customer.getString(11);
+			int 	zip = customer.getInt(10);
+			int ssn = customer.getInt(11);
 			String securityQuestion = customer.getString(12);
 			String answer = customer.getString(13);
 			
@@ -107,7 +107,11 @@ public interface Database {
 		return c;
 		
 	}
-	
+	/**
+	 * This method changes a users password in the database
+	 * @param userName
+	 * @param password
+	 */
 	default void updatePassword(String userName, String password){
 		String query = "UPDATE Customer SET CusPassword ='"+password+ "' WHERE Customer.CusUserName = '" +userName+"'";
 		try{
