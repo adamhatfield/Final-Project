@@ -22,7 +22,7 @@ public interface Database {
 	}
 	
 	/**Add new user into database*/
-	default void insertNewUser(Customer customer){
+	default void insertNewUser(Customer customer) throws NumberFormatException{
 		
 			
 		/**Query that adds a user to the Customer table*/
