@@ -3,6 +3,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.text.JTextComponent;
 import javax.swing.text.NumberFormatter;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -18,6 +19,9 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
+
+import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
 import java.awt.Component;
 import java.sql.*;
 import java.text.NumberFormat;
@@ -25,6 +29,7 @@ import java.text.NumberFormat;
 import javax.swing.JInternalFrame;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPasswordField;
+import javax.swing.JList;
 
 public class TestGUI extends JFrame implements Database {
 	private JPanel panelLogin;
@@ -36,8 +41,6 @@ public class TestGUI extends JFrame implements Database {
 	private JTextField jtfLastName;
 	private JTextField jtfStreetAddress;
 	private JTextField jtfState;
-	private JFormattedTextField jtfZipCode;
-	private JTextField jtfSsn;
 	private JTextField jtfEnterSecurityQuestion;
 	private JTextField jtfSecurityQuestionAnswer;
 	private JTextField jtfEmailAddress;
@@ -55,11 +58,14 @@ public class TestGUI extends JFrame implements Database {
 	private JLabel lblSecuritQuestion;
 	private JLabel lblAnswer;
 	private JButton btnLogout;
-	private JTextField textField;
+	private JTextField jtfUserLogin;
 	private JPasswordField passwordField;
 	private JPanel panelPasswordReset;
 	private JTextField textField_1;
 	protected Customer customer = new Customer();
+	private JButton btnBack;
+	private JTextField jtfZipCode;
+	private JTextField jtfSSN;
 	
 	
 	public TestGUI() {
@@ -83,17 +89,7 @@ public class TestGUI extends JFrame implements Database {
 		getContentPane().add(panelUserView, "Main Menu");
 		panelUserView.setLayout(null);
 		
-		/**Logout button for main menu, returns user to login window*/
-		btnLogout = new JButton("Logout");
-		btnLogout.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				panelUserView.setVisible(false);
-				panelLogin.setVisible(true);
-				
-			}
-		});
-		btnLogout.setBounds(390, 19, 117, 29);
-		panelUserView.add(btnLogout);
+		
 		panelUserView.setVisible(false);
 		
 		
@@ -102,10 +98,10 @@ public class TestGUI extends JFrame implements Database {
 		lblEmailAddress.setBounds(27, 50, 113, 16);
 		panelLogin.add(lblEmailAddress);
 		
-		textField = new JTextField();
-		textField.setBounds(10, 65, 130, 26);
-		panelLogin.add(textField);
-		textField.setColumns(10);
+		jtfUserLogin = new JTextField();
+		jtfUserLogin.setBounds(10, 65, 130, 26);
+		panelLogin.add(jtfUserLogin);
+		jtfUserLogin.setColumns(10);
 		
 		/**Password text field for login window*/
 		JLabel lblPassword = new JLabel("Password");
@@ -116,12 +112,25 @@ public class TestGUI extends JFrame implements Database {
 		passwordField.setBounds(10, 120, 130, 26);
 		panelLogin.add(passwordField);
 		
+		/**Logout button for main menu, returns user to login window*/
+		btnLogout = new JButton("Logout");
+		btnLogout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelUserView.setVisible(false);
+				panelLogin.setVisible(true);
+				jtfUserLogin.setText("");
+				passwordField.setText("");
+			}
+		});
+		btnLogout.setBounds(390, 19, 117, 29);
+		panelUserView.add(btnLogout);
+		
 		/**Ok button and listener*/
 		JButton btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				String userName = textField.getText();
+				String userName = jtfUserLogin.getText();
 				String password = passwordField.getText();
 				System.out.println(userName+ " " +password);
 				
@@ -219,16 +228,6 @@ public class TestGUI extends JFrame implements Database {
 		jtfState .setBounds(27, 254, 130, 26);
 		panelNewUser.add(jtfState);
 		jtfState .setColumns(10);
-		/**ZipCode Text Field*/
-		jtfZipCode  = new JFormattedTextField();
-		jtfZipCode.setBounds(27, 281, 130, 26);
-		panelNewUser.add(jtfZipCode);
-		jtfZipCode.setColumns(10);
-		/**SSN text field*/
-		jtfSsn = new JTextField();
-		jtfSsn.setBounds(27, 308, 130, 26);
-		panelNewUser.add(jtfSsn);
-		jtfSsn.setColumns(10);
 		/**Security Question Text Field*/
 		jtfEnterSecurityQuestion = new JTextField();
 		jtfEnterSecurityQuestion.setBounds(27, 336, 348, 26);
@@ -244,6 +243,7 @@ public class TestGUI extends JFrame implements Database {
 		jtfEmailAddress.setBounds(26, 112, 130, 26);
 		panelNewUser.add(jtfEmailAddress);
 		jtfEmailAddress.setColumns(10);
+		
 		/**
 		 * Action Listener for create account button
 		 * Takes all text fields and converts value to string
@@ -264,13 +264,23 @@ public class TestGUI extends JFrame implements Database {
 				String address = jtfStreetAddress.getText();
 				String city = jtfCity.getText();
 				String state = jtfState.getText();
-				String zip = jtfZipCode.getText();
-				String SSN = jtfSsn.getText();
+				String zipCode = jtfZipCode.getText();
+				String SSNConvert = jtfSSN.getText();
 				
+				if(zipCode.equals(null) || SSNConvert.equals(null) || userName.equals(null) || emailAddress.equals(null)){
+					JOptionPane.showMessageDialog(null, "One or more of the required fields was left blank:");
+				}else{
+				try{
+					int zip = Integer.parseInt(zipCode);
+					int SSN = Integer.parseInt(SSNConvert);
 				Customer c = new Customer(accountNumber,userName,password,emailAddress,firstName,LastName,address,city,state,zip,SSN,securityQuestion,securityAnswer);
 				insertNewUser(c);
 				panelNewUser.setVisible(false);
 				panelUserView.setVisible(true);
+				}catch(Exception n){
+					JOptionPane.showMessageDialog(null, "One or more of the required fields was left blank:");
+				}
+			}
 			}
 		});
 		createNewUser.setBounds(383, 377, 130, 29);
@@ -335,6 +345,16 @@ public class TestGUI extends JFrame implements Database {
 		btnNewButton.setBounds(23, 388, 117, 29);
 		panelNewUser.add(btnNewButton);
 		
+		jtfZipCode = new JTextField();
+		jtfZipCode.setBounds(27, 281, 130, 26);
+		panelNewUser.add(jtfZipCode);
+		jtfZipCode.setColumns(10);
+		
+		jtfSSN = new JTextField();
+		jtfSSN.setBounds(26, 308, 130, 26);
+		panelNewUser.add(jtfSSN);
+		jtfSSN.setColumns(10);
+		
 		panelPasswordReset = new JPanel();
 		getContentPane().add(panelPasswordReset, "name_19672340689757");
 		panelPasswordReset.setLayout(null);
@@ -360,6 +380,7 @@ public class TestGUI extends JFrame implements Database {
 		JButton btnViewSecurityQuestion = new JButton("View Security Question");
 		btnViewSecurityQuestion.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				
 				String userName = textField_1.getText();
 				
 					try{
@@ -389,7 +410,7 @@ public class TestGUI extends JFrame implements Database {
 						
 						
 					}catch(NullPointerException n){
-						System.out.println("No user found:");
+						JOptionPane.showMessageDialog(null, "Please enter a valid username.");
 					}catch(Exception e1){
 						e1.printStackTrace();
 					}
@@ -400,6 +421,16 @@ public class TestGUI extends JFrame implements Database {
 		});
 		btnViewSecurityQuestion.setBounds(38, 147, 168, 29);
 		panelPasswordReset.add(btnViewSecurityQuestion);
+		
+		btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelPasswordReset.setVisible(false);
+				panelLogin.setVisible(true);
+			}
+		});
+		btnBack.setBounds(38, 188, 117, 29);
+		panelPasswordReset.add(btnBack);
 		
 		
 	}
