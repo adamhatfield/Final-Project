@@ -24,7 +24,7 @@ public class Customer extends Person implements Database {
 	 * For the new user tab
 	 * */
 	public Customer(String newUserName,String newPassword,String newEmailAddress,String newFirstName,String newLastName,String newAddress,
-			String newCity,String newState, String newZipCode, String newSSN,String newSecurityQuestion,String newSecurityAnswer){
+			String newCity,String newState, int newZipCode, int newSSN,String newSecurityQuestion,String newSecurityAnswer){
 		super.setFirstName(newFirstName);
 		super.setLastName(newLastName);
 		super.setSSN(newSSN);
@@ -87,8 +87,8 @@ public class Customer extends Person implements Database {
 	 * @param newSecurityAnswer
 	 */
 	
-	public Customer(int newAccountNumber,String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, String newCity, String newState, String newZip,String newSSN,String newSecurityQuestion,
-			String newAnswer){
+	public Customer(int newAccountNumber,String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, 
+			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer){
 		super.setFirstName(newFirstName);
 		super.setLastName(newLastName);
 		super.setSSN(newSSN);
@@ -111,6 +111,7 @@ public class Customer extends Person implements Database {
 	/**Method that resets the user name of a customer*/
 	public void setUserName(String newUserName){
 		this.userName = newUserName;
+		
 	}
 	protected String getPassword(){
 		return password;
