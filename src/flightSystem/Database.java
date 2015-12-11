@@ -34,7 +34,7 @@ public interface Database {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem","admin","Arson8629");
 			Statement s = connection.createStatement();
 			s.executeUpdate(query);
-			s.executeQuery(databaseCommit);
+			s.executeQuery(databaseCommit); //what is this?
 			 
 			
 		}catch(Exception e){
