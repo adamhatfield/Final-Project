@@ -20,16 +20,19 @@ import javax.swing.JOptionPane;
 
 import org.eclipse.wb.swing.FocusTraversalOnArray;
 
-import com.mysql.jdbc.exceptions.MySQLIntegrityConstraintViolationException;
+
 
 import java.awt.Component;
 import java.sql.*;
 import java.text.NumberFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JList;
+import javax.swing.JTextPane;
 
 public class TestGUI extends JFrame implements Database {
 	private JPanel panelLogin;
@@ -66,6 +69,9 @@ public class TestGUI extends JFrame implements Database {
 	private JButton btnBack;
 	private JTextField jtfZipCode;
 	private JTextField jtfSSN;
+	private JTextField jtfDepartureField;
+	private JTextField jtfDestinationField;
+	private JPanel panelSearchResults;
 	
 	
 	public TestGUI() {
@@ -87,7 +93,6 @@ public class TestGUI extends JFrame implements Database {
 		/**Main Menu*/
 		final JPanel panelUserView = new JPanel();
 		getContentPane().add(panelUserView, "Main Menu");
-		panelUserView.setLayout(null);
 		
 		
 		panelUserView.setVisible(false);
@@ -114,6 +119,7 @@ public class TestGUI extends JFrame implements Database {
 		
 		/**Logout button for main menu, returns user to login window*/
 		btnLogout = new JButton("Logout");
+		btnLogout.setBounds(390, 19, 117, 29);
 		btnLogout.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				panelUserView.setVisible(false);
@@ -122,8 +128,104 @@ public class TestGUI extends JFrame implements Database {
 				passwordField.setText("");
 			}
 		});
-		btnLogout.setBounds(390, 19, 117, 29);
+		panelUserView.setLayout(null);
 		panelUserView.add(btnLogout);
+		
+		
+		JPanel panelSearchFlight = new JPanel();
+		panelSearchFlight.setVisible(false);
+		panelSearchFlight.setBorder(null);
+		panelSearchFlight.setBounds(153, 88, 374, 329);
+		panelUserView.add(panelSearchFlight);
+		panelSearchFlight.setLayout(null);
+		
+		jtfDepartureField = new JTextField();
+		jtfDepartureField.setBounds(16, 31, 130, 26);
+		panelSearchFlight.add(jtfDepartureField);
+		jtfDepartureField.setColumns(10);
+		
+		jtfDestinationField = new JTextField();
+		jtfDestinationField.setBounds(16, 85, 130, 26);
+		panelSearchFlight.add(jtfDestinationField);
+		jtfDestinationField.setColumns(10);
+		
+		JLabel lblEnterTheCity = new JLabel("Departure Point");
+		lblEnterTheCity.setBounds(16, 6, 98, 16);
+		panelSearchFlight.add(lblEnterTheCity);
+		
+		JLabel lblDestination = new JLabel("Destination");
+		lblDestination.setBounds(16, 57, 98, 16);
+		panelSearchFlight.add(lblDestination);
+		
+		JButton btnSearchDestination = new JButton("Search");
+		btnSearchDestination.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelSearchResults.setVisible(true);
+				panelSearchFlight.setVisible(false);
+			}
+		});
+		btnSearchDestination.setBounds(20, 116, 93, 22);
+		panelSearchFlight.add(btnSearchDestination);
+		
+		JLabel lblDepartureDate = new JLabel("Departure Date");
+		lblDepartureDate.setBounds(16, 150, 125, 16);
+		panelSearchFlight.add(lblDepartureDate);
+		
+		JLabel lblNewLabel = new JLabel("Departure Time");
+		lblNewLabel.setBounds(16, 202, 107, 16);
+		panelSearchFlight.add(lblNewLabel);
+		
+		JButton btnSearchDateTime = new JButton("Search");
+		btnSearchDateTime.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelSearchResults.setVisible(true);
+				panelSearchFlight.setVisible(false);
+			}
+		});
+		btnSearchDateTime.setBounds(21, 253, 90, 24);
+		panelSearchFlight.add(btnSearchDateTime);
+		
+		JFormattedTextField formattedDateField = new JFormattedTextField();
+		formattedDateField.setBounds(16, 166, 130, 26);
+		panelSearchFlight.add(formattedDateField);
+		LocalDate date = LocalDate.now();
+		formattedDateField.setValue(date);
+		
+		JFormattedTextField formattedTimeField = new JFormattedTextField();
+		formattedTimeField.setBounds(16, 218, 125, 26);
+		panelSearchFlight.add(formattedTimeField);
+		LocalTime time = LocalTime.now();
+		formattedTimeField.setValue(time);
+		
+		panelSearchResults = new JPanel();
+		panelSearchResults.setVisible(false);
+		panelSearchResults.setBounds(0, 0, 10, 10);
+		panelSearchFlight.add(panelSearchResults);
+		
+		
+		
+		JButton btnSearchFlights = new JButton("Search Flights");
+		btnSearchFlights.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				panelSearchFlight.setVisible(true);
+			}
+		});
+		btnSearchFlights.setBounds(19, 88, 117, 29);
+		panelUserView.add(btnSearchFlights);
+		
+		JButton btnBookedFlights = new JButton("Booked Flights");
+		btnBookedFlights.setBounds(19, 129, 117, 29);
+		panelUserView.add(btnBookedFlights);
+		
+		JButton btnAccountInformation = new JButton("Account");
+		btnAccountInformation.setBounds(19, 170, 117, 29);
+		btnAccountInformation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		panelUserView.add(btnAccountInformation);
+		
+	
 		
 		/**Ok button and listener*/
 		JButton btnOk = new JButton("Ok");
