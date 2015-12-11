@@ -13,7 +13,7 @@ public class Home implements Database{
 		
 		Scanner input = new Scanner(System.in);
 		//starting with Book Flight
-		
+		///*************START BOOK FLIGHT********************
 		System.out.println("You are in the booking flights menu\n");
 		System.out.println("From");//must be city
 		String from = input.nextLine(); //scans full string
@@ -103,9 +103,32 @@ public class Home implements Database{
 				}
 				
 				
-				
-		}
-		
-		
-	}
+				//at if logged in or if logged out after picking flight
+				//first if logged in
+				boolean logged=false; //this code should be at beginning of program
+	
+				//logged in is trait of customer
+				if(logged){
+					System.out.println("You have been successfully added to flight");
+				}
+				else {
+					//press create a new account or login for now will do scanner
+					System.out.println("1.) Create a new account");
+					System.out.println("2.) Login");
+					int xx= input.nextInt();
+					//////both I
+					if(xx==1){
+					//insert ADAM create new customer method
+					//then think popup
+					System.out.println("You have been successfully added to flight");
+					}
+					if(xx==2){
+					//insert Adam login method
+					//then think popup
+					System.out.println("You have been successfully added to flight");
+				}
+				}
+					//********END  BOOK FLIGHT**************
+					 }
+					 
 }
