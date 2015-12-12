@@ -29,21 +29,18 @@ public interface Editting {
 	default double getFlightCost(Flight f){
 		return f.flightCost;
 	}
-	default void setFlightDuration(Flight f,int hrs, int min){
-	//	System.out.println("You are are entering in the duration of flight "+ f.flightNumber+ ""
-	//			+ "\n Enter in hours first then mintunes.");
-//		int hrs = s.nextInt();
-//		int min= s.nextInt();
-		f.flightDuration= new Time(hrs, min, 0);
+	default void setFlightDuration(Flight f,String n){
+	
+		f.flightDuration= n;
 	}
-	default Time getFlightDuration(Flight f){
+	default String getFlightDuration(Flight f){
 		return f.flightDuration;
 	}
-	default void setFlightDate(Flight f,int year, int month, int day, int hr, int minute){
-		f.flightDate = new GregorianCalendar( year,  month,  day,  hr,  minute);
+	default void setFlightDate(Flight f,String date){
+		f.flightDate = date;
 		
 	}//You have nothing for arrival to Destination
-	default GregorianCalendar getFlightDate(Flight f){
+	default String getFlightDate(Flight f){
 		return f.flightDate;
 	}
 	default boolean isBooked(Flight f){
