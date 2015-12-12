@@ -8,6 +8,7 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
 
 public class Flight { 
 	int flightNumber ;
@@ -29,8 +30,18 @@ public class Flight {
 	}
 	Flight(int flightNum,int flightCap, int onFl, String destination, String start, String date, String duration, String time, double cost) throws ClassNotFoundException, SQLException{ //create a flight Not in database
 		//creates new flight in database first
+		Scanner s = new Scanner(System.in);
 		String user = "root";
 		String password = "adamyouknowit";
+		if(worked(flightNum)){ //worked true means entry already exist
+			System.out.println("A flight by this number already exist");
+			while(worked(flightNum)){
+				System.out.println("Try entering in a new Flight Number");
+				flightNum=s.nextInt();
+			}
+			
+		}
+		else {
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
 		Statement statement = connection.createStatement();
@@ -50,8 +61,21 @@ public class Flight {
 		flightDuration=duration;
 		flightTime=time;
 		flightCost=cost;
+		}
 		
-		
+	}
+	boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
+		boolean worked=false;//didnt get anything
+		String user = "root";
+		String password = "adamyouknowit";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery("SELECT FlightNumber FROM FLIGHT WHERE"
+				+ " FlightNumber ="+flightNumber);
+		while(resultSet.next())
+			worked=true; //got something
+		return worked;
 	}
 	void getFlight(int flightNumber) throws ClassNotFoundException, SQLException{ //flightNumber because is primary key
 		String user = "root";
