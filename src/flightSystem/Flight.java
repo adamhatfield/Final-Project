@@ -20,19 +20,35 @@ public class Flight {
 	String flightTime;
 	double flightCost; //same
 	static int numOfFlights=0;
+	
 	Flight(int numOfDateBaseFlight) throws ClassNotFoundException, SQLException{
+		//MAKES FLIGHT OUT OF DATABASE STORED FLIGHT
 		numOfFlights++;
 		getFlight(numOfDateBaseFlight);
 		
 	}
-	Flight(int flightNum,int flightCap, String destination, String start, String date, String duration, double cost){
+	Flight(int flightNum,int flightCap, int onFl, String destination, String start, String date, String duration, String time, double cost) throws ClassNotFoundException, SQLException{ //create a flight Not in database
+		//creates new flight in database first
+		String user = "root";
+		String password = "adamyouknowit";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery("INSERT into FLIGHT(FlightNumber, FlightDestination,"
+				+ " FlightStartPoint, FlightDuration, FlightDate, Flight TIme,"
+				+ " FlightCost, FlightCapacity, OnFlight)VALUES ("+flightNum+",'"+destination+"','"+start+"',"+duration+",'"+date+"'"
+						+ ",'"+time+"',"+cost+","+flightCap+","+onFl);
+		//creation ended
+		//after created can use as normal flight that is in database
 		numOfFlights++;
 		flightNumber=flightNum;
 		flightCapacity=flightCap;
+		onFlight=onFl;
 		flightDestination=destination;
 		flightStartPoint=start;
 		flightDate=date;
 		flightDuration=duration;
+		flightTime=time;
 		flightCost=cost;
 		
 		
@@ -77,19 +93,60 @@ public class Flight {
 					/*int c =resultSet.getInt(5);
 					int o =resultSet.getInt(6);
 					int remain=c-o; */
-	/*int getFlightNumber(){
-		return this.flightNumber;
+	public int getFlightNumber() {
+		return flightNumber;
 	}
-	void setFlightNumber(int num){
-		this.flightNumber =num;
+	public void setFlightNumber(int flightNumber) {
+		this.flightNumber = flightNumber;
 	}
-	int getFlightCapacity(){
-		return this.flightCapacity;
+	public int getFlightCapacity() {
+		return flightCapacity;
 	}
-	void setFlightCapcity(int num){
-		 this.flightCapacity=num;
-		
-	}	*/
+	public void setFlightCapacity(int flightCapacity) {
+		this.flightCapacity = flightCapacity;
+	}
+	public int getOnFlight() {
+		return onFlight;
+	}
+	public void setOnFlight(int onFlight) {
+		this.onFlight = onFlight;
+	}
+	public String getFlightDestination() {
+		return flightDestination;
+	}
+	public void setFlightDestination(String flightDestination) {
+		this.flightDestination = flightDestination;
+	}
+	public String getFlightStartPoint() {
+		return flightStartPoint;
+	}
+	public void setFlightStartPoint(String flightStartPoint) {
+		this.flightStartPoint = flightStartPoint;
+	}
+	public String getFlightDate() {
+		return flightDate;
+	}
+	public void setFlightDate(String flightDate) {
+		this.flightDate = flightDate;
+	}
+	public String getFlightDuration() {
+		return flightDuration;
+	}
+	public void setFlightDuration(String flightDuration) {
+		this.flightDuration = flightDuration;
+	}
+	public String getFlightTime() {
+		return flightTime;
+	}
+	public void setFlightTime(String flightTime) {
+		this.flightTime = flightTime;
+	}
+	public double getFlightCost() {
+		return flightCost;
+	}
+	public void setFlightCost(double flightCost) {
+		this.flightCost = flightCost;
+	}
 	
 
 }
