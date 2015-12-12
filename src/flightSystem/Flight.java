@@ -1,32 +1,31 @@
 package flightSystem;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Time;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class Flight {
+public class Flight { 
 	int flightNumber ;
 	int flightCapacity =100;
 	int onFlight=0;
 	String flightDestination ;
 	String flightStartPoint;
-
-	//Calendar flightDate;
-	GregorianCalendar flightDate; //thing should go into interface for use by admin
-	Time flightDuration;  //same
+	String flightDate;
+	String flightDuration;  //same
+	String flightTime;
 	double flightCost; //same
 	static int numOfFlights=0;
-	Flight(){
+	Flight(int numOfDateBaseFlight) throws ClassNotFoundException, SQLException{
 		numOfFlights++;
-		flightNumber=999;
-		flightDestination= "NoWhere";
-		flightStartPoint="NoStart";
-		flightDuration= new Time(1,1,0);
-		flightDate= new GregorianCalendar(1,1,1,1,1);
-		flightCost=1000.99;
+		getFlight(numOfDateBaseFlight);
 		
 	}
-	Flight(int flightNum,int flightCap, String destination, String start, GregorianCalendar date, Time duration, double cost){
+	Flight(int flightNum,int flightCap, String destination, String start, String date, String duration, double cost){
 		numOfFlights++;
 		flightNumber=flightNum;
 		flightCapacity=flightCap;
@@ -38,6 +37,46 @@ public class Flight {
 		
 		
 	}
+	void getFlight(int flightNumber) throws ClassNotFoundException, SQLException{ //flightNumber because is primary key
+		String user = "root";
+		String password = "adamyouknowit";
+		
+		//Load JDBC driver
+		Class.forName("com.mysql.jdbc.Driver");
+		//Establish connection
+		Connection connection = DriverManager.getConnection
+			("jdbc:mysql://127.0.0.1/project",user,password);
+				//System.out.println("Database Connected");
+				
+				Statement statement = connection.createStatement();
+				
+				ResultSet resultSet = statement.executeQuery
+						("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
+								+ "FlightCapacity, OnFlight, FlightDuration"
+								+ ", FlightTime, FlightNumber FROM FLIGHT "
+								+ "WHERE FlightNumber ="+flightNumber);
+								
+				boolean worked=false; //for if get a null because no current flight match requirement
+			
+				while(resultSet.next()){
+					this.flightNumber=flightNumber;
+					flightDestination=resultSet.getString(3);
+					flightStartPoint=resultSet.getString(1);
+					flightCapacity=resultSet.getInt(5);
+					onFlight=resultSet.getInt(6);
+					flightDate=resultSet.getString(4);
+					flightDuration=resultSet.getString(7);
+					flightTime=resultSet.getString(8);
+					flightCost=resultSet.getDouble(2);
+					worked=true;//didnt get null
+				}
+				if (worked==false)
+					System.out.println("Flight number "+flightNumber+" does not exist");
+	}
+				
+					/*int c =resultSet.getInt(5);
+					int o =resultSet.getInt(6);
+					int remain=c-o; */
 	/*int getFlightNumber(){
 		return this.flightNumber;
 	}

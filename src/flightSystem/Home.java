@@ -10,8 +10,45 @@ public class Home implements Database{
 		System.out.println("Book Flight");
 		System.out.println("My Flights");
 		System.out.println("Flight Status");
+		//System.out.println("Edit Flights"); Hiddden until logged in as Admin
 		
 		Scanner input = new Scanner(System.in);
+		
+		
+		//*****************Start of Login
+		//instert adam login
+		//note will need a second login method for admin because admin is own table
+			
+		//after admin logs in
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 		//starting with Book Flight
 		///*************START BOOK FLIGHT********************
 		System.out.println("You are in the booking flights menu\n");
@@ -24,7 +61,7 @@ public class Home implements Database{
 		//need to add return date to database
 	//	System.out.println("Return Date");
 	//	String Return = input.nextLine();
-		System.out.println("Passengers");
+		System.out.println("Passengers");//number of tickets being sold
 		int passengers = input.nextInt();
 		// press ok button
 		
@@ -40,11 +77,11 @@ public class Home implements Database{
 		String user = "root";
 		String password = "adamyouknowit";
 		
-				//Load JDBC driver
-				Class.forName("com.mysql.jdbc.Driver");
-				//Establish connection
-				Connection connection = DriverManager.getConnection
-						("jdbc:mysql://127.0.0.1/project",user,password);
+		//Load JDBC driver
+		Class.forName("com.mysql.jdbc.Driver");
+		//Establish connection
+		Connection connection = DriverManager.getConnection
+			("jdbc:mysql://127.0.0.1/project",user,password);
 				System.out.println("Database Connected");
 				
 				Statement statement = connection.createStatement();
@@ -53,33 +90,39 @@ public class Home implements Database{
 				 * From here now you only need to display
 				 */
 				ResultSet resultSet = statement.executeQuery
-						("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, FlightCapacity, OnFlight, FlightDuration"
+						("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
+								+ "FlightCapacity, OnFlight, FlightDuration"
 								+ ", FlightTime, FlightNumber FROM flight "
-								+ "WHERE FlightStartPoint ='"+ from+"' AND FlightDestination ='"+to+"' AND FlightDate ='"+date+"'");
+								+ "WHERE FlightStartPoint ='"+ from+"' AND FlightDestination "
+										+ "='"+to+"' AND FlightDate ='"+date+"'");
 				boolean worked=false; //for if get a null because no current flight match requirement
-				int choose;
+				int choose = 0;
 				while(resultSet.next()){
 				worked=true;//didnt get null
 				int c =resultSet.getInt(5);
 				int o =resultSet.getInt(6);
 				int remain=c-o;
 			//gui button action here subbing it right now with scanner
-				//System.out.println("Click on Flight you want");//or enter in flight number
+			//System.out.println("Click on Flight you want");//or enter in flight number
 				
-				
-				System.out.println("Flight#\tCost\tTickets#\tFlight Time\tFlight Duration\tFlight Date");
-				System.out.println(resultSet.getInt(9)+"\t"+resultSet.getDouble(2)+"\t"+remain+"\t"+resultSet.getTime(8)+"\t"+resultSet.getTime(7)+""
+				//below prints all flights that match requirement in table-like format
+				System.out.println("Flight#\tCost\tSeats Left#\tFlight Time\tFlight Durati"
+						+ "on\tFlight Date");
+				System.out.println(resultSet.getInt(9)+"\t"+resultSet.getDouble(2)+"\t"
+						+ ""+remain+"\t"+resultSet.getTime(8)+"\t"+resultSet.getTime(7)+""
 						+ "\t"+resultSet.getDate(4));
 				}
 				if(worked==false){
 					System.out.println("Sorry not flight is available that meets your requirements");
 					} // GOOD SPOT TO GO BACK TO HOME PAGE BUTTON OR MAKE VISIBLE
 				else {
-				System.out.println("Enter in flight number you want");
+				System.out.println("Enter in flight number you want"); 
+				//can be replace with button;
 				boolean x=true;
-				while(x){ //loops into valid flightNUm is entered in
+				while(x){ //loops until valid flightNUm is entered in
 					choose =input.nextInt();
-					resultSet=statement.executeQuery("SELECT FlightNumber FROM FLIGHT WHERE FlightNumber ="+choose);
+					resultSet=statement.executeQuery("SELECT FlightNumber FROM FLIGHT"
+							+ " WHERE FlightNumber ="+choose);
 					while(resultSet.next())
 					x=false; //only can get here if valid flight number
 					
@@ -90,9 +133,10 @@ public class Home implements Database{
 				//and new passenger count on ticket
 				
 				//*********METHOD TO CHECK IF ADD TO FLIGHT IS POSSIBLE
+				// void tryAddFlight(int choose){
 				ResultSet resultSet1=statement.executeQuery("SELECT OnFlight,FlightCapacity from flight WHERE FlightNumber ="+choose);
 				while(resultSet1.next())
-				if(resultSet1.getInt(1)+passengers<=resultSet1.getInt(2)){
+				if(resultSet1.getInt(1)+passengers<=resultSet1.getInt(2)){		
 					int mod=resultSet1.getInt(1)+passengers;
 					statement.execute("UPDATE FLIGHT SET OnFlight ="+mod+" WHERE FlightNumber ="+choose);
 						
@@ -103,13 +147,23 @@ public class Home implements Database{
 				}
 				
 				
-				//at if logged in or if logged out after picking flight
+				// if logged in or if logged out after picking flight
 				//first if logged in
 				boolean logged=false; //this code should be at beginning of program
 	
 				//logged in is trait of customer
 				if(logged){
 					System.out.println("You have been successfully added to flight");
+					/*new to add flight number to customer at this point
+					 * new customerUserName to identify
+					 * example of be Consumer c = new Consumer
+					 * c.getUserName
+					 * then from here do update statement
+					 */
+					Customer c = new Customer();//shouldnt be here
+					
+					
+					
 				}
 				else {
 					//press create a new account or login for now will do scanner
