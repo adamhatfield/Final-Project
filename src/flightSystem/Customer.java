@@ -70,7 +70,7 @@ public class Customer extends Person implements Database {
 		this.securityQuestionAnswer = c.getSecurityQuestionAnswer();
 		
 	}
-	Customer()
+	//Customer(){}
 	
 	/**
 	 * Creates customer object from outputs of database. System holds this object until the customer logouts.

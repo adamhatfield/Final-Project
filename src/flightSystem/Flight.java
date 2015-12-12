@@ -109,6 +109,11 @@ public class Flight {
 	}
 	}
 	
+	static void deleteFlight(int flightNum) throws ClassNotFoundException, SQLException{
+		String query =("DELETE FROM Flight WHERE FlightNumber ="+flightNum);
+		Flight.queryFlight(query);
+	}
+	
 	static boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
 		boolean worked=false;//didnt get anything
 		String user = "root";
@@ -215,8 +220,9 @@ public class Flight {
 									+ ""+resultSet.getDouble(2));
 			}
 	}
-	//not functional yet lol queryFlight
-	void queryFlight(String query) throws ClassNotFoundException, SQLException{
+	//found purpose
+	//for quick updates
+	static void queryFlight(String query) throws ClassNotFoundException, SQLException{
 		String user = "root";
 		String password = "adamyouknowit";
 		Class.forName("com.mysql.jdbc.Driver");
@@ -224,9 +230,9 @@ public class Flight {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(query);
 		//if trying to print results of query
-		while(resultSet.next()){
+		//while(resultSet.next()){
 			
-		}
+		//}
 		
 	}
 	public int getFlightNumber() {
