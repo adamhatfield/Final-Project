@@ -171,7 +171,7 @@ public class Home implements Editting{
 		System.out.println("To");//must be city
 		String to = input.nextLine();
 		System.out.println("Depart Date");//format yyyy-mm-dd
-		String date = input.nextLine();
+		String ddate = input.nextLine();
 		//need to add return date to database
 	//	System.out.println("Return Date");
 	//	String Return = input.nextLine();
@@ -196,7 +196,7 @@ public class Home implements Editting{
 		//Establish connection
 		Connection connection = DriverManager.getConnection
 			("jdbc:mysql://127.0.0.1/project",user,password);
-				System.out.println("Database Connected");
+			//	System.out.println("Database Connected");
 				
 				Statement statement = connection.createStatement();
 				/*
@@ -208,7 +208,7 @@ public class Home implements Editting{
 								+ "FlightCapacity, OnFlight, FlightDuration"
 								+ ", FlightTime, FlightNumber FROM flight "
 								+ "WHERE FlightStartPoint ='"+ from+"' AND FlightDestination "
-										+ "='"+to+"' AND FlightDate ='"+date+"'");
+										+ "='"+to+"' AND FlightDate ='"+ddate+"'");
 				boolean worked=false; //for if get a null because no current flight match requirement
 				int choose = 0;
 				while(resultSet.next()){
@@ -227,7 +227,7 @@ public class Home implements Editting{
 						+ "\t"+resultSet.getDate(4));
 				}
 				if(worked==false){
-					System.out.println("Sorry not flight is available that meets your requirements");
+					System.out.println("Sorry no flight is available that meets your requirements");
 					} // GOOD SPOT TO GO BACK TO HOME PAGE BUTTON OR MAKE VISIBLE
 				else {
 				System.out.println("Enter in flight number you want"); 
@@ -274,7 +274,7 @@ public class Home implements Editting{
 					 * c.getUserName
 					 * then from here do update statement
 					 */
-					Customer c = new Customer();//shouldnt be here
+				//	Customer c = new Customer();//shouldnt be here
 					//********need to add flightNumber to customer
 					
 					
@@ -287,6 +287,7 @@ public class Home implements Editting{
 					//////both I
 					if(xx==1){
 					//insert ADAM create new customer method
+						
 					//then think popup
 						
 						//********need to add flightNumber to customer
@@ -294,9 +295,17 @@ public class Home implements Editting{
 					}
 					if(xx==2){
 					//insert Adam login method
+					System.out.println("Enter in UserName");
+					String usser=input.nextLine();
+					System.out.println("Enter in Password");
+					String pass=input.nextLine();
+					if(Database.login( usser, pass)){
 					//then think popup
 						//********need to add flightNumber to customer
+					String query =("UPDATE Customer SET FlightNumber ="+choose+" WHERE CusUserName = '"+usser+"'");
+					Database.queryCustomer(query);
 					System.out.println("You have been successfully added to flight");
+					}
 				}
 				}
 					//********END  BOOK FLIGHT**************
