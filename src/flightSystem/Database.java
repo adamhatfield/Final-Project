@@ -79,7 +79,7 @@ public interface Database {
 	 */
 	default Customer getCustomerInfo(String userName) throws Exception{
 		Customer c = new Customer();
-		
+		///*************UPDATE HERE
 		String query = "SELECT CusAccountNumber,CusUserName,CusPassword,CusEmailAddress,CusFirstName,CusLastName,"
 				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer FROM Customer WHERE Customer.CusUserName ='"+userName+"'";
 		
@@ -100,7 +100,7 @@ public interface Database {
 			int ssn = customer.getInt(11);
 			String securityQuestion = customer.getString(12);
 			String answer = customer.getString(13);
-			
+			//*************UPDATE THIS constructor needs to get FLIGHTNUMBER
 			 c = new Customer(accountNumber, cusUserName, cusPassword, cusEmail, firstName, lastName, address, city, state, zip, ssn, securityQuestion, answer);
 			 
 		}
@@ -141,6 +141,11 @@ public interface Database {
 		//}
 		
 	}
+	static void deleteFlightFromCustomer(String username) throws ClassNotFoundException, SQLException{
+		String query =("UPDATE Customer SET FlightNumber ="+null+" WHERE CusUserName ="+username);
+		Flight.queryFlight(query);
+	}
+	
 	
 	
 	
