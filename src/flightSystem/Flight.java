@@ -114,9 +114,71 @@ public class Flight {
 					System.out.println("Flight number "+flightNumber+" does not exist");
 	}
 				
-					/*int c =resultSet.getInt(5);
-					int o =resultSet.getInt(6);
-					int remain=c-o; */
+	void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
+		if(worked(flightNum)==false){ //worked true means entry already exist
+			System.out.println("A flight by this number does not exist");
+			Scanner s = new Scanner(System.in);
+			while(worked(flightNum)==false){
+				System.out.println("Reenter a valid Flight Number");
+				flightNum=s.nextInt();
+			}
+		}
+		else
+		{
+	
+		String user = "root";
+		String password = "adamyouknowit";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery
+				("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
+				+ "FlightCapacity, OnFlight, FlightDuration"
+				+ ", FlightTime, FlightNumber FROM FLIGHT "
+				+ "WHERE FlightNumber ="+flightNumber);
+		while(resultSet.next()){
+			System.out.println("FlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t"
+					+ "FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
+			System.out.println(resultSet.getInt(9)+"\t"+resultSet.getInt(5)+"\t"+resultSet.getInt(6)+""
+					+ "\t"+resultSet.getString(1)+"\t"+resultSet.getString(3)+"\t"+resultSet.getString(4)+""
+							+ "\t"+resultSet.getString(8)+"\t"+resultSet.getString(7)+"\t"
+									+ ""+resultSet.getDouble(2));
+			}
+		}
+	}
+	void printFlight() throws ClassNotFoundException, SQLException	{
+		String user = "root";
+		String password = "adamyouknowit";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery
+				("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
+				+ "FlightCapacity, OnFlight, FlightDuration"
+				+ ", FlightTime, FlightNumber FROM FLIGHT");
+		while(resultSet.next()){
+			System.out.println("FlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t"
+					+ "FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
+			System.out.println(resultSet.getInt(9)+"\t"+resultSet.getInt(5)+"\t"+resultSet.getInt(6)+""
+					+ "\t"+resultSet.getString(1)+"\t"+resultSet.getString(3)+"\t"+resultSet.getString(4)+""
+							+ "\t"+resultSet.getString(8)+"\t"+resultSet.getString(7)+"\t"
+									+ ""+resultSet.getDouble(2));
+			}
+	}
+	//not functional yet lol queryFlight
+	void queryFlight(String query) throws ClassNotFoundException, SQLException{
+		String user = "root";
+		String password = "adamyouknowit";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery(query);
+		//if trying to print results of query
+		while(resultSet.next()){
+			
+		}
+		
+	}
 	public int getFlightNumber() {
 		return flightNumber;
 	}
