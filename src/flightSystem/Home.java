@@ -2,7 +2,7 @@ package flightSystem;
 import java.util.Scanner;
 import java.sql.*;
 
-public class Home implements Database{
+public class Home implements Editting{
 	public static void main(String[] args)
 			throws SQLException, ClassNotFoundException {
 		
@@ -33,8 +33,63 @@ public class Home implements Database{
 		/*here you have the option to modify flight
 		 * see customers in selected flight
 		 */
-		Flight eFlight = new Flight(pick);
+		Flight f = new Flight(pick); //pull flight from database with the flightNumber requested
 		
+		Flight.printFlight(f.flightNumber); //prints selected flight
+		System.out.println("To edit Press(enter in) one of the below Number type 0 (Zero) to stop \n"  //button if there
+				+ "1\t\t2\t\t3\t\t4\t\t5\t\t6\t\t7\t\t8\t\t9"
+				+ "\n Enter one at a time");
+	// NUMBERS SHOULD MATCH WITH TITLES 1 IS FLIGHT NUMBER ETC("FlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
+		int i=-1;
+		int a;
+		//currently doesnt check if data enter in fits scheme of database. for example could enter
+		//cost equal 10000000 but that is too big for database
+		while(i!=0){
+			switch (i){
+			case 1:	System.out.println("What will new FlightNumber be");//has to be unique 
+					a =input.nextInt();
+					Editting.setFlightNumber(f,a);
+					break;
+			case 2: System.out.println("What will new FlightCapacity be");
+					a =input.nextInt();
+					Editting.setFlightCapacity(f,a);
+					break;
+			case 3: System.out.println("What will new On Flight be");
+					a =input.nextInt();
+					Editting.setOnFlight(f,a);
+					break;
+			case 4:	System.out.println("What will be new From Point");
+					String aa = new String (input.nextLine());
+					Editting.setFlightStartPoint(f,aa);
+					break;
+			case 5: System.out.println("What will be new Destination");
+					aa = new String (input.nextLine());
+					Editting.setFlightDestination(f,aa);
+					break;
+			case 6: System.out.println("What will be new date");
+					aa = new String (input.nextLine());
+					Editting.setFlightDate(f, aa);
+					break;
+			case 7: System.out.println("What will be new Time");
+					aa = new String (input.nextLine());
+					Editting.setFlightTime(f, aa);
+					break; 
+			case 8: System.out.println("What will be new Duration of flight");
+					aa = new String (input.nextLine());
+					Editting.setFlightDuration(f, aa);
+					break; 
+			case 9:	System.out.println("What will be new Cost of flight");
+					a = input.nextInt();
+					Editting.setFlightCost(f, a);
+					break; 
+			
+			}
+			f.databaseFlight(); //updates database
+			Flight.printFlight(f.flightNumber);//prints whats been changed
+			i=input.nextInt();
+
+		}
+		// go back to home of adim
 		
 		//*****************Start of Login
 		//instert adam login
