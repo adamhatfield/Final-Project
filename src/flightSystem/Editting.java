@@ -1,7 +1,6 @@
 package flightSystem;
 
 import java.sql.Time;
-import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 public interface Editting {

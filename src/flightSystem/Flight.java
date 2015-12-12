@@ -5,9 +5,6 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Time;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.Scanner;
 
 public class Flight { 
@@ -64,6 +61,50 @@ public class Flight {
 		}
 		
 	}
+	int insertTimeD(){ //makse sure no code inserts time or date as String into database..wont work
+		int time=0;
+		time +=10_000*Integer.parseInt(this.flightTime.substring(0,2));
+		time +=100*Integer.parseInt(this.flightTime.substring(3, 5));
+		time +=Integer.parseInt(this.flightTime.substring(6));
+		return time;
+	}
+	int insertDurationD(){ //makse sure no code inserts time or date as String into database..wont work
+		int time=0;
+		time +=10_000*Integer.parseInt(this.flightDuration.substring(0,2));
+		time +=100*Integer.parseInt(this.flightDuration.substring(3, 5));
+		time +=Integer.parseInt(this.flightDuration.substring(6));
+		return time;
+	}
+	int insertDateD(){ //makse sure no code inserts time or date as String into database..wont work
+		int time=0;
+		time +=10_000*Integer.parseInt(this.flightDate.substring(0,4));
+		time +=100*Integer.parseInt(this.flightDate.substring(5, 7));
+		time +=Integer.parseInt(this.flightDate.substring(8));
+		return time;
+	}
+	
+	void databaseFlight(Flight f) throws ClassNotFoundException, SQLException{
+		String user = "root";
+		String password = "adamyouknowit";
+		Scanner s = new Scanner(System.in);
+		if(worked(f.flightNumber)){ //worked true means entry already exist
+			System.out.println("A flight by this number already exist\n"
+					+ "Are you sure you want to OVERWRITE. If so press 1 or press 2 for NO");}
+			int yes=s.nextInt();
+			if(yes==1){
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+				Statement statement = connection.createStatement();
+				ResultSet resultSet = statement.executeQuery("UPDATE FLIGHT SET FlightNumber ="+f.flightNumber+" FlightDestination ='"+f.flightDestination+"'"
+						+ " FlightStartPoint = '"+f.flightStartPoint+"' FlightDuration = "+f.insertDurationD()+" "
+								+ "FlightDate = "+f.insertDateD()+" FlightTime = "+f.insertTimeD()+" FlightCost = "+f.flightCost+" "
+										+ "FlightCapacity = "+f.flightCapacity+" OnFlight ="+f.onFlight+" WHERE FlightNumber"
+												+ " = "+f.flightNumber);
+				
+				
+	}
+	}
+	
 	boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
 		boolean worked=false;//didnt get anything
 		String user = "root";
@@ -80,7 +121,7 @@ public class Flight {
 	void getFlight(int flightNumber) throws ClassNotFoundException, SQLException{ //flightNumber because is primary key
 		String user = "root";
 		String password = "adamyouknowit";
-		
+		Scanner s = new Scanner(System.in);
 		//Load JDBC driver
 		Class.forName("com.mysql.jdbc.Driver");
 		//Establish connection
@@ -96,8 +137,12 @@ public class Flight {
 								+ ", FlightTime, FlightNumber FROM FLIGHT "
 								+ "WHERE FlightNumber ="+flightNumber);
 								
-				boolean worked=false; //for if get a null because no current flight match requirement
-			
+				//might not want this
+				while(worked(flightNumber)==false){//for if get a null because no current flight match requirement
+					System.out.println("Reenter a valid Flight Number");
+					flightNumber=s.nextInt();}
+				//might not want this stop
+				//if decide to replace add worked=false back
 				while(resultSet.next()){
 					this.flightNumber=flightNumber;
 					flightDestination=resultSet.getString(3);
@@ -108,10 +153,10 @@ public class Flight {
 					flightDuration=resultSet.getString(7);
 					flightTime=resultSet.getString(8);
 					flightCost=resultSet.getDouble(2);
-					worked=true;//didnt get null
+				//	worked=true;//didnt get null
 				}
-				if (worked==false)
-					System.out.println("Flight number "+flightNumber+" does not exist");
+				//if (worked==false)
+				//	System.out.println("Flight number "+flightNumber+" does not exist");
 	}
 				
 	void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
@@ -146,7 +191,7 @@ public class Flight {
 			}
 		}
 	}
-	void printFlight() throws ClassNotFoundException, SQLException	{
+	static void printFlight() throws ClassNotFoundException, SQLException	{
 		String user = "root";
 		String password = "adamyouknowit";
 		Class.forName("com.mysql.jdbc.Driver");
@@ -156,10 +201,11 @@ public class Flight {
 				("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
 				+ "FlightCapacity, OnFlight, FlightDuration"
 				+ ", FlightTime, FlightNumber FROM FLIGHT");
+		int i=0; //just for count
+		System.out.println("FlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t"
+				+ "FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
 		while(resultSet.next()){
-			System.out.println("FlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t"
-					+ "FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
-			System.out.println(resultSet.getInt(9)+"\t"+resultSet.getInt(5)+"\t"+resultSet.getInt(6)+""
+			System.out.println(++i +").\t"+resultSet.getInt(9)+"\t"+resultSet.getInt(5)+"\t"+resultSet.getInt(6)+""
 					+ "\t"+resultSet.getString(1)+"\t"+resultSet.getString(3)+"\t"+resultSet.getString(4)+""
 							+ "\t"+resultSet.getString(8)+"\t"+resultSet.getString(7)+"\t"
 									+ ""+resultSet.getDouble(2));

@@ -54,7 +54,7 @@ public class Customer extends Person implements Database {
 	 * @param newSecurityQuestion
 	 * @param newSecurityAnswer
 	 */
-	public Customer(Customer c){
+	public Customer(Customer c){ //Whats this? customer that makes customer
 		super.setFirstName(c.getFirstName());
 		super.setLastName(c.getLastName());
 		super.setSSN(c.getSSN());
@@ -70,6 +70,8 @@ public class Customer extends Person implements Database {
 		this.securityQuestionAnswer = c.getSecurityQuestionAnswer();
 		
 	}
+	Customer()
+	
 	/**
 	 * Creates customer object from outputs of database. System holds this object until the customer logouts.
 	 * @param newAccountNumber

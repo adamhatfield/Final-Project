@@ -6,13 +6,34 @@ public class Home implements Database{
 	public static void main(String[] args)
 			throws SQLException, ClassNotFoundException {
 		
+		Scanner input = new Scanner(System.in);
+		
 		System.out.println("Login");
 		System.out.println("Book Flight");
 		System.out.println("My Flights");
 		System.out.println("Flight Status");
-		//System.out.println("Edit Flights"); Hiddden until logged in as Admin
 		
-		Scanner input = new Scanner(System.in);
+		
+		///should be hidden or if statement ONLY FOR ADIM
+		System.out.println("All Flights"); //Hiddden until logged in as Admin
+		System.out.println("All Customers");
+		System.out.println("Book Flight");
+		System.out.println("My Flights");
+		System.out.println("Flight Status");
+	
+		//if admin clicks all flights
+		System.out.println("Here are all the Flights");
+		Flight.printFlight();
+		
+		//press or enter in what flight you want to edit
+		//going to do scan for now
+		System.out.println("Enter in Flight Number you want to edit");
+		int pick=input.nextInt();
+		//then take you here
+		/*here you have the option to modify flight
+		 * see customers in selected flight
+		 */
+		Flight eFlight = new Flight(pick);
 		
 		
 		//*****************Start of Login
@@ -161,7 +182,7 @@ public class Home implements Database{
 					 * then from here do update statement
 					 */
 					Customer c = new Customer();//shouldnt be here
-					
+					//********need to add flightNumber to customer
 					
 					
 				}
@@ -174,11 +195,14 @@ public class Home implements Database{
 					if(xx==1){
 					//insert ADAM create new customer method
 					//then think popup
+						
+						//********need to add flightNumber to customer
 					System.out.println("You have been successfully added to flight");
 					}
 					if(xx==2){
 					//insert Adam login method
 					//then think popup
+						//********need to add flightNumber to customer
 					System.out.println("You have been successfully added to flight");
 				}
 				}
