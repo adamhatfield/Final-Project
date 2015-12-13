@@ -44,7 +44,7 @@ public interface Database {
 	
 	
 	/**Method that logs user into flight system main menu*/
-	static boolean login(String userName, String password){
+	default boolean login(String userName, String password){
 		/**Query that checks database for username and password based on textfield entry*/
 		String query = "select CusUserName, CusPassword from Customer where Customer.CusUserName = '"+userName+"' and Customer.CusPassword = '"+password+"'";
 		
@@ -81,7 +81,7 @@ public interface Database {
 		Customer c = new Customer();
 		///*************UPDATE HERE
 		String query = "SELECT CusAccountNumber,CusUserName,CusPassword,CusEmailAddress,CusFirstName,CusLastName,"
-				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer FROM Customer WHERE Customer.CusUserName ='"+userName+"'";
+				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer,FlightNumber FROM Customer WHERE Customer.CusUserName ='"+userName+"'";
 		
 		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem","admin","Arson8629");
 		Statement stmt = connection.createStatement();
