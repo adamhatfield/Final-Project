@@ -18,10 +18,6 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 
-import org.eclipse.wb.swing.FocusTraversalOnArray;
-
-
-
 import java.awt.Component;
 import java.sql.*;
 import java.text.NumberFormat;
@@ -39,7 +35,6 @@ public class TestGUI extends JFrame implements Database {
 	private JPanel panelNewUser;
 	private JPanel panelUserView;
 	private JTextField jtfUserName;
-	private JTextField jtfPassword;
 	private JTextField jtfFirstName;
 	private JTextField jtfLastName;
 	private JTextField jtfStreetAddress;
@@ -72,7 +67,8 @@ public class TestGUI extends JFrame implements Database {
 	private JTextField jtfDepartureField;
 	private JTextField jtfDestinationField;
 	private JPanel panelSearchResults;
-	
+			Customer c;
+	private JPasswordField jtfPassword;
 	
 	public TestGUI() {
 		
@@ -132,7 +128,7 @@ public class TestGUI extends JFrame implements Database {
 		panelUserView.add(btnLogout);
 		
 		
-		JPanel panelSearchFlight = new JPanel();
+		final JPanel panelSearchFlight = new JPanel();
 		panelSearchFlight.setVisible(false);
 		panelSearchFlight.setBorder(null);
 		panelSearchFlight.setBounds(153, 88, 374, 329);
@@ -156,19 +152,27 @@ public class TestGUI extends JFrame implements Database {
 		JLabel lblDestination = new JLabel("Destination");
 		lblDestination.setBounds(16, 57, 98, 16);
 		panelSearchFlight.add(lblDestination);
-		
+		//Button and action listener for search flight button.
 		JButton btnSearchDestination = new JButton("Search");
 		btnSearchDestination.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String departure = jtfDepartureField.getText();
 				String destination = jtfDepartureField.getText();
+				try{
+				Flight f = findFlight(departure,destination);
+				
 				if(departure.equals("") || destination.equals("")){
 					JOptionPane.showMessageDialog(null, "Please enter a departure and arrival location");
 				}else{
 					panelSearchFlight.setVisible(false);
 					panelSearchResults.setVisible(true);
 				}
-				
+				}catch(ClassNotFoundException C){
+					JOptionPane.showMessageDialog(null, "No matching flights found.");
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Database error, check destination and departure format, only alphabetical characters allowed.");
+				}
 			}
 		});
 		btnSearchDestination.setBounds(20, 116, 93, 22);
@@ -195,7 +199,7 @@ public class TestGUI extends JFrame implements Database {
 		JFormattedTextField formattedDateField = new JFormattedTextField();
 		formattedDateField.setBounds(16, 166, 130, 26);
 		panelSearchFlight.add(formattedDateField);
-		LocalDate date = LocalDate.now();
+		Integer date = 0;
 		formattedDateField.setValue(date);
 		
 		JFormattedTextField formattedTimeField = new JFormattedTextField();
@@ -225,16 +229,20 @@ public class TestGUI extends JFrame implements Database {
 		panelUserView.add(btnBookedFlights);
 		
 		JButton btnAccountInformation = new JButton("Account");
-		btnAccountInformation.setBounds(19, 170, 117, 29);
+		btnAccountInformation.setBounds(19, 204, 117, 29);
 		btnAccountInformation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
 		panelUserView.add(btnAccountInformation);
 		
+		JButton btnViewFlights = new JButton("View Flights");
+		btnViewFlights.setBounds(19, 167, 117, 29);
+		panelUserView.add(btnViewFlights);
+		
 	
 		
-		/**Ok button and listener*/
+		/**Ok button and listener for login page*/
 		JButton btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -307,11 +315,6 @@ public class TestGUI extends JFrame implements Database {
 		jtfUserName.setBounds(26, 53, 130, 26);
 		panelNewUser.add(jtfUserName);
 		jtfUserName.setColumns(10);
-		/**Password text field*/
-		jtfPassword = new JTextField();
-		jtfPassword.setBounds(26, 83, 130, 26);
-		panelNewUser.add(jtfPassword);
-		jtfPassword.setColumns(10);
 		/**FirstName text field*/
 		jtfFirstName = new JTextField();
 		jtfFirstName.setBounds(26, 150, 130, 26);
@@ -334,17 +337,17 @@ public class TestGUI extends JFrame implements Database {
 		jtfCity.setColumns(10);
 		/**State Text Field*/
 		jtfState = new JTextField();
-		jtfState .setBounds(27, 254, 130, 26);
+		jtfState .setBounds(26, 254, 130, 26);
 		panelNewUser.add(jtfState);
 		jtfState .setColumns(10);
 		/**Security Question Text Field*/
 		jtfEnterSecurityQuestion = new JTextField();
-		jtfEnterSecurityQuestion.setBounds(27, 336, 348, 26);
+		jtfEnterSecurityQuestion.setBounds(26, 336, 348, 26);
 		panelNewUser.add(jtfEnterSecurityQuestion);
 		jtfEnterSecurityQuestion.setColumns(10);
 		/**Security Question Answer TextField*/
 		jtfSecurityQuestionAnswer = new JTextField();
-		jtfSecurityQuestionAnswer.setBounds(27, 363, 178, 26);
+		jtfSecurityQuestionAnswer.setBounds(26, 363, 178, 26);
 		panelNewUser.add(jtfSecurityQuestionAnswer);
 		jtfSecurityQuestionAnswer.setColumns(10);
 		/**Email Address Text Field*/
@@ -362,7 +365,6 @@ public class TestGUI extends JFrame implements Database {
 		createNewUser.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				int accountNumber =(int) (1000 + Math.random() * 9000);
 				String firstName = jtfFirstName.getText();
 				String LastName = jtfLastName.getText();
 				String userName = jtfUserName.getText();
@@ -382,7 +384,7 @@ public class TestGUI extends JFrame implements Database {
 				try{
 					int zip = Integer.parseInt(zipCode);
 					int SSN = Integer.parseInt(SSNConvert);
-				Customer c = new Customer(accountNumber,userName,password,emailAddress,firstName,LastName,address,city,state,zip,SSN,securityQuestion,securityAnswer);
+				Customer c = new Customer(userName,password,emailAddress,firstName,LastName,address,city,state,zip,SSN,securityQuestion,securityAnswer);
 				insertNewUser(c);
 				panelNewUser.setVisible(false);
 				panelUserView.setVisible(true);
@@ -464,8 +466,12 @@ public class TestGUI extends JFrame implements Database {
 		panelNewUser.add(jtfSSN);
 		jtfSSN.setColumns(10);
 		
+		jtfPassword = new JPasswordField();
+		jtfPassword.setBounds(27, 83, 129, 26);
+		panelNewUser.add(jtfPassword);
+		
 		panelPasswordReset = new JPanel();
-		getContentPane().add(panelPasswordReset, "name_19672340689757");
+		getContentPane().add(panelPasswordReset, "Reset Password");
 		panelPasswordReset.setLayout(null);
 		
 		JLabel lblEnterYouPassword = new JLabel("Enter your Username:");
@@ -493,17 +499,23 @@ public class TestGUI extends JFrame implements Database {
 				String userName = textField_1.getText();
 				
 					try{
-						customer = new Customer(getCustomerInfo(userName));
+						customer = getCustomerInfo(userName);
 						if(customer.getUserName().equals(userName)){
 							String answer = JOptionPane.showInputDialog( customer.getSecurityQuestion());
 							if(customer.getSecurityQuestionAnswer().equals(answer)){
+								try{
 								String updatedPassword = JOptionPane.showInputDialog("Enter a new password:");
 								customer.setPassword(updatedPassword);
 								updatePassword(customer.getUserName(),updatedPassword );
 								JOptionPane.showMessageDialog(null, "Your password has been changed.");
 								panelPasswordReset.setVisible(false);
 								panelLogin.setVisible(true);
-								
+								}catch(NullPointerException p){
+									String updatedPassword = JOptionPane.showInputDialog("Password cannot be blank, re-enter the password:");
+									while(updatedPassword.equals(" "))
+										   updatedPassword = JOptionPane.showInputDialog("Password cannot be blank, re-enter the password:");
+
+								}
 								
 							}else{
 								JOptionPane.showMessageDialog(null, "Check answer to security question,");
