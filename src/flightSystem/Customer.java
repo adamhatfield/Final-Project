@@ -5,6 +5,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 /**
  * This class creates a customer constructor for a flight booking system
@@ -21,6 +22,7 @@ public class Customer extends Person implements Database {
 	private String securityQuestion;
 	private String securityQuestionAnswer;
 	private int accountNumber;
+	private ArrayList<Integer> flightNumber = new ArrayList<>();
 	
 	/**Default no-arg Constructor*/
 	public Customer(){
@@ -42,6 +44,7 @@ public class Customer extends Person implements Database {
 		this.password = newPassword;
 		this.emailAddress = newEmailAddress;
 		this.accountNumber = (int) (1000 + Math.random() * 9000);
+		this.flightNumber.add(0);
 
 	}
 	/**
@@ -114,6 +117,7 @@ public class Customer extends Person implements Database {
 		this.securityQuestionAnswer = newAnswer;
 		
 	}
+	/**
 	void printCustomerOn(int FlightNumber){
 		String user = "root";
 		String password = "adamyouknowit";
@@ -121,7 +125,7 @@ public class Customer extends Person implements Database {
 		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(
-	}
+	}*/
 	
 	/**Method that returns username*/
 	public String getUserName(){
