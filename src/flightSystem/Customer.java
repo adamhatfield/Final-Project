@@ -31,7 +31,7 @@ public class Customer extends Person implements Database {
 	/**Creates a customer objects with specified name, address, social security number, username and password
 	 * For the new user tab
 	 * */
-	public Customer(String newUserName,String newPassword,String newEmailAddress,String newFirstName,String newLastName,String newAddress,
+	public Customer( String newUserName,String newPassword,String newEmailAddress,String newFirstName,String newLastName,String newAddress,
 			String newCity,String newState, int newZipCode, int newSSN,String newSecurityQuestion,String newSecurityAnswer){
 		super.setFirstName(newFirstName);
 		super.setLastName(newLastName);
@@ -47,41 +47,7 @@ public class Customer extends Person implements Database {
 		this.flightNumber.add(0);
 
 	}
-	/**
-	 * Creates customer object copy from existing object. 
-	 * @param newAccountNumber
-	 * @param newUserName
-	 * @param newPassword
-	 * @param newEmailAddress
-	 * @param newFirstName
-	 * @param newLastName
-	 * @param newAddress
-	 * @param newCity
-	 * @param newState
-	 * @param newZipCode
-	 * @param newSSN
-	 * @param newSecurityQuestion
-	 * @param newSecurityAnswer
-	 */
-	public Customer(Customer c){ //Whats this? customer that makes customer
-		super.setFirstName(c.getFirstName());
-		super.setLastName(c.getLastName());
-		super.setSSN(c.getSSN());
-		super.setAddress(c.getAddress());
-		super.setZipCode(c.getZipCode());
-		super.setCity(c.getCity());
-		super.setState(c.getState());
-		this.userName = c.getUserName();
-		this.password = c.getPassword();
-		this.emailAddress = c.getEmailAddress();
-		this.accountNumber = c.getAccountNumber();
-		this.securityQuestion = c.getSecurityQuestion();
-		this.securityQuestionAnswer = c.getSecurityQuestionAnswer();
-		
-	}
-	//Customer(String Uname, String Pword){
-		
-	//}
+	
 	
 	/**
 	 * Creates customer object from outputs of database. System holds this object until the customer logouts.
@@ -101,7 +67,7 @@ public class Customer extends Person implements Database {
 	 */
 	
 	public Customer(int newAccountNumber,String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, 
-			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer){
+			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer,ArrayList<Integer> flightNumber){
 		super.setFirstName(newFirstName);
 		super.setLastName(newLastName);
 		super.setSSN(newSSN);
@@ -115,6 +81,7 @@ public class Customer extends Person implements Database {
 		this.accountNumber = newAccountNumber;
 		this.securityQuestion = newSecurityQuestion;
 		this.securityQuestionAnswer = newAnswer;
+		this.flightNumber = flightNumber;
 		
 	}
 	/**
@@ -171,6 +138,7 @@ public class Customer extends Person implements Database {
 	public int getAccountNumber(){
 		return accountNumber;
 	}
+	
 	
 	public void customerString( Customer c){
 		System.out.println(c.getAccountNumber()+ " \n"+c.getUserName()+" \n"+c.getPassword()+"\n"+c.getEmailAddress()+" \n"+c.getFirstName()+"\n"
