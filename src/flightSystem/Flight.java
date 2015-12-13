@@ -8,6 +8,8 @@ import java.sql.Statement;
 import java.sql.Time;
 import java.util.Scanner;
 
+import javax.swing.JOptionPane;
+
 public class Flight { 
 	int flightNumber ;
 	int flightCapacity =100;
@@ -19,6 +21,12 @@ public class Flight {
 	String flightTime;
 	double flightCost; //same
 	static int numOfFlights=0;
+	final String USER = "Admin";
+	final String PASSWORD = "Arson8629";
+	
+	Flight(){
+		
+	}
 	
 	Flight(int numOfDateBaseFlight) throws ClassNotFoundException, SQLException{
 		//MAKES FLIGHT OUT OF DATABASE STORED FLIGHT
@@ -29,13 +37,15 @@ public class Flight {
 	Flight(int flightNum,int flightCap, int onFl, String destination, String start, String date, String duration, String time, double cost) throws ClassNotFoundException, SQLException{ //create a flight Not in database
 		//creates new flight in database first
 		Scanner s = new Scanner(System.in);
-		String user = "root";
-		String password = "adamyouknowit";
+		/** Checks if entered flightnumber already exists in the database
+		 * Prompts user to re-enter a flight number using pop up messages
+		 * until a valid NEW flightnumber is entered*/
 		if(worked(flightNum)){ //worked true means entry already exist
-			System.out.println("A flight by this number already exist");
+			String flightNumber = JOptionPane.showInputDialog("That flight number already exists, please re-enter the flight number:");
+			flightNum = Integer.parseInt(flightNumber);
 			while(worked(flightNum)){
-				System.out.println("Try entering in a new Flight Number");
-				flightNum=s.nextInt();
+				 flightNumber = JOptionPane.showInputDialog("That flight number already exists, please re-enter the flight number:");
+				flightNum = Integer.parseInt(flightNumber);
 			}
 			
 		}
@@ -44,7 +54,7 @@ public class Flight {
 			flightDuration=duration;
 			flightTime=time;
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery("INSERT into FLIGHT(FlightNumber, FlightDestination,"
 				+ " FlightStartPoint, FlightDuration, FlightDate, Flight TIme,"
@@ -88,8 +98,6 @@ public class Flight {
 	}
 	
 	void databaseFlight() throws ClassNotFoundException, SQLException{
-		String user = "root";
-		String password = "adamyouknowit";
 		Scanner s = new Scanner(System.in);
 		if(worked(this.flightNumber)){ //worked true means entry already exist
 			System.out.println("A flight by this number already exist\n"
@@ -97,7 +105,7 @@ public class Flight {
 			int yes=s.nextInt();
 			if(yes==1){
 				Class.forName("com.mysql.jdbc.Driver");
-				Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+				Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 				Statement statement = connection.createStatement();
 				ResultSet resultSet = statement.executeQuery("UPDATE FLIGHT SET FlightNumber ="+this.flightNumber+" FlightDestination ='"+this.flightDestination+"'"
 						+ " FlightStartPoint = '"+this.flightStartPoint+"' FlightDuration = "+this.insertDurationD()+" "
@@ -109,17 +117,15 @@ public class Flight {
 	}
 	}
 	
-	static void deleteFlight(int flightNum) throws ClassNotFoundException, SQLException{
+	public void deleteFlight(int flightNum) throws ClassNotFoundException, SQLException{
 		String query =("DELETE FROM Flight WHERE FlightNumber ="+flightNum);
-		Flight.queryFlight(query);
+		queryFlight(query);
 	}
 	
-	static boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
+	public boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
 		boolean worked=false;//didnt get anything
-		String user = "root";
-		String password = "adamyouknowit";
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery("SELECT FlightNumber FROM FLIGHT WHERE"
 				+ " FlightNumber ="+flightNumber);
@@ -127,15 +133,13 @@ public class Flight {
 			worked=true; //got something
 		return worked;
 	}
-	void getFlight(int flightNumber) throws ClassNotFoundException, SQLException{ //flightNumber because is primary key
-		String user = "root";
-		String password = "adamyouknowit";
+	public void getFlight(int flightNumber) throws ClassNotFoundException, SQLException{ //flightNumber because is primary key
 		Scanner s = new Scanner(System.in);
 		//Load JDBC driver
 		Class.forName("com.mysql.jdbc.Driver");
 		//Establish connection
 		Connection connection = DriverManager.getConnection
-			("jdbc:mysql://127.0.0.1/project",user,password);
+			("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 				//System.out.println("Database Connected");
 				
 				Statement statement = connection.createStatement();
@@ -168,22 +172,19 @@ public class Flight {
 				//	System.out.println("Flight number "+flightNumber+" does not exist");
 	}
 				
-	static void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
+	 public void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
 		if(worked(flightNum)==false){ //worked true means entry already exist
 			System.out.println("A flight by this number does not exist");
 			Scanner s = new Scanner(System.in);
 			while(worked(flightNum)==false){
-				System.out.println("Reenter a valid Flight Number");
+				//String flightNumber = JOptionPane.showMessageDialog(null,"Reenter a valid Flight Number");
 				flightNum=s.nextInt();
 			}
 		}
 		else
 		{
-	
-		String user = "root";
-		String password = "adamyouknowit";
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery
 				("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
@@ -200,11 +201,9 @@ public class Flight {
 			}
 		}
 	}
-	static void printFlight() throws ClassNotFoundException, SQLException	{
-		String user = "root";
-		String password = "adamyouknowit";
+	public void printFlight() throws ClassNotFoundException, SQLException	{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery
 				("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
@@ -222,11 +221,9 @@ public class Flight {
 	}
 	//found purpose
 	//for quick updates
-	static void queryFlight(String query) throws ClassNotFoundException, SQLException{
-		String user = "root";
-		String password = "adamyouknowit";
+	 public void queryFlight(String query) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(query);
 		//if trying to print results of query
@@ -235,6 +232,8 @@ public class Flight {
 		//}
 		
 	}
+	 
+	 
 	public int getFlightNumber() {
 		return flightNumber;
 	}
