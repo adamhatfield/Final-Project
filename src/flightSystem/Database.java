@@ -1,5 +1,8 @@
 package flightSystem;
 import java.sql.*;
+import java.util.ArrayList;
+
+import javax.swing.JOptionPane;
 public interface Database { 
 	  
 	
@@ -14,10 +17,10 @@ public interface Database {
 			Class.forName("com.mysql.jdbc.Driver");
 			//Establish connection
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",user,password);
-			System.out.println("Database Connected");
+			
 			
 		}catch(Exception e){
-			System.out.println("Error in connecting to Database");
+			JOptionPane.showMessageDialog(null,"Error in connecting to Database");
 		}
 	}
 	
@@ -34,7 +37,7 @@ public interface Database {
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem","admin","Arson8629");
 			Statement s = connection.createStatement();
 			s.executeUpdate(query);
-			s.executeQuery(databaseCommit); //what is this?
+			s.executeQuery(databaseCommit); //Automatically makes the database save any changes
 			 
 			
 		}catch(Exception e){
@@ -87,6 +90,7 @@ public interface Database {
 		Statement stmt = connection.createStatement();
 		ResultSet customer = stmt.executeQuery(query);
 		while(customer.next()){
+			
 			int accountNumber = customer.getInt(1);
 			String cusUserName = customer.getString(2);
 			String cusPassword = customer.getString(3);
@@ -100,8 +104,15 @@ public interface Database {
 			int ssn = customer.getInt(11);
 			String securityQuestion = customer.getString(12);
 			String answer = customer.getString(13);
+			ArrayList<Integer> flightNum = new ArrayList<>();
+			int i = 14;
+			while(customer.isLast()){
+				flightNum.add(customer.getInt(i));
+				i++;
+				
+			}
 			//*************UPDATE THIS constructor needs to get FLIGHTNUMBER
-			 c = new Customer(accountNumber, cusUserName, cusPassword, cusEmail, firstName, lastName, address, city, state, zip, ssn, securityQuestion, answer);
+			 c = new Customer(accountNumber, cusUserName, cusPassword, cusEmail, firstName, lastName, address, city, state, zip, ssn, securityQuestion, answer, flightNum);
 			 
 		}
 		return c;
@@ -128,9 +139,8 @@ public interface Database {
 	}
 	//found purpose
 	//for quick updates
-	static void queryCustomer(String query) throws ClassNotFoundException, SQLException{
-		String user = "root";
-		String password = "adamyouknowit";
+	default void queryCustomer(String query) throws ClassNotFoundException, SQLException{
+		
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
 		Statement statement = connection.createStatement();
@@ -141,11 +151,54 @@ public interface Database {
 		//}
 		
 	}
-	static void deleteFlightFromCustomer(String username) throws ClassNotFoundException, SQLException{
+	 default void deleteFlightFromCustomer(String username) throws ClassNotFoundException, SQLException{
 		String query =("UPDATE Customer SET FlightNumber ="+null+" WHERE CusUserName ="+username);
-		Flight.queryFlight(query);
+		queryFlight(query);
 	}
 	
+	//found purpose
+	//for quick updates
+	  default void queryFlight(String query) throws ClassNotFoundException, SQLException{
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery(query);
+		//if trying to print results of query
+		//while(resultSet.next()){
+			
+		//}
+		
+	}
+	  /**Method that returns a flight object that matches the corresponding departure and destination from search flight view.*/
+	  default Flight findFlight(String departure, String destination) throws ClassNotFoundException, SQLException{
+		  Flight f = new Flight();
+		  String query = ("SELECT FlightNumber, FlightDestination, FlightStartPoint, FlightDuration, FlightDate, FlightTime FlightCost, FlightCapacity, OnFlight"
+				+ "FROM Flight WHERE Flight.FlightStartPoint = '"+departure+"' and Flight.FlightDestination = '"+destination+"' ");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet rs = statement.executeQuery(query);
+		
+		while(rs.next()){
+		int flightNumber = rs.getInt(1);
+		String destin = rs.getString(2);
+		String start = rs.getString(3);
+		String duration = rs.getString(4);
+		String date = rs.getString(5);
+		String time = rs.getString(6);
+		double cost = rs.getDouble(7);
+		int capacity = rs.getInt(8);
+		int reserved = rs.getInt(9);
+		
+		 f = new Flight( flightNumber, capacity, reserved, destin, start, date, duration, time,  cost);
+		
+		}
+		
+		
+		
+		  
+		  return f;
+		  
+	  }
 	
 	
 	
