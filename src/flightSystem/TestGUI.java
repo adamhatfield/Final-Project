@@ -160,8 +160,15 @@ public class TestGUI extends JFrame implements Database {
 		JButton btnSearchDestination = new JButton("Search");
 		btnSearchDestination.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				panelSearchResults.setVisible(true);
-				panelSearchFlight.setVisible(false);
+				String departure = jtfDepartureField.getText();
+				String destination = jtfDepartureField.getText();
+				if(departure.equals("") || destination.equals("")){
+					JOptionPane.showMessageDialog(null, "Please enter a departure and arrival location");
+				}else{
+					panelSearchFlight.setVisible(false);
+					panelSearchResults.setVisible(true);
+				}
+				
 			}
 		});
 		btnSearchDestination.setBounds(20, 116, 93, 22);

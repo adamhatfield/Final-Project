@@ -1,6 +1,6 @@
 package flightSystem;
 
-public class Admin extends Customer implements Editting {
+public class Admin extends Customer implements Editting, Database {
 	private String adminUserName;
 	private String adminPassword;
 	

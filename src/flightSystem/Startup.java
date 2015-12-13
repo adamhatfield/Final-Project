@@ -18,7 +18,7 @@ public class Startup extends TestGUI implements Database {
 	public Startup(){
 		getContentPane().setLayout(new CardLayout(0, 0));
 		JFrame frame = new TestGUI();
-		frame.setSize(500,500);
+		frame.setSize(700,500);
 		frame.setLocationRelativeTo(null);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setVisible(true);
