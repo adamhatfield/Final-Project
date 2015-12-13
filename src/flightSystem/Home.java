@@ -2,7 +2,7 @@ package flightSystem;
 import java.util.Scanner;
 import java.sql.*;
 
-public class Home implements Editting{
+public class Home implements Database,Editting{
 	public static void main(String[] args)
 			throws SQLException, ClassNotFoundException {
 		
@@ -299,7 +299,7 @@ public class Home implements Editting{
 					String usser=input.nextLine();
 					System.out.println("Enter in Password");
 					String pass=input.nextLine();
-					if(Database.login( usser, pass)){
+					//if(login( usser, pass)){
 					//then think popup
 						//********need to add flightNumber to customer
 					String query =("UPDATE Customer SET FlightNumber ="+choose+" WHERE CusUserName = '"+usser+"'");
@@ -311,4 +311,4 @@ public class Home implements Editting{
 					//********END  BOOK FLIGHT**************
 					 }
 					 
-}
+//}
