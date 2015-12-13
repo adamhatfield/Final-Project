@@ -44,7 +44,7 @@ public interface Database {
 	
 	
 	/**Method that logs user into flight system main menu*/
-	default boolean login(String userName, String password){
+	static boolean login(String userName, String password){
 		/**Query that checks database for username and password based on textfield entry*/
 		String query = "select CusUserName, CusPassword from Customer where Customer.CusUserName = '"+userName+"' and Customer.CusPassword = '"+password+"'";
 		
@@ -79,7 +79,7 @@ public interface Database {
 	 */
 	default Customer getCustomerInfo(String userName) throws Exception{
 		Customer c = new Customer();
-		
+		///*************UPDATE HERE
 		String query = "SELECT CusAccountNumber,CusUserName,CusPassword,CusEmailAddress,CusFirstName,CusLastName,"
 				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer FROM Customer WHERE Customer.CusUserName ='"+userName+"'";
 		
@@ -100,7 +100,7 @@ public interface Database {
 			int ssn = customer.getInt(11);
 			String securityQuestion = customer.getString(12);
 			String answer = customer.getString(13);
-			
+			//*************UPDATE THIS constructor needs to get FLIGHTNUMBER
 			 c = new Customer(accountNumber, cusUserName, cusPassword, cusEmail, firstName, lastName, address, city, state, zip, ssn, securityQuestion, answer);
 			 
 		}
@@ -126,6 +126,26 @@ public interface Database {
 		
 	}
 	}
+	//found purpose
+	//for quick updates
+	static void queryCustomer(String query) throws ClassNotFoundException, SQLException{
+		String user = "root";
+		String password = "adamyouknowit";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery(query);
+		//if trying to print results of query
+		//while(resultSet.next()){
+			
+		//}
+		
+	}
+	static void deleteFlightFromCustomer(String username) throws ClassNotFoundException, SQLException{
+		String query =("UPDATE Customer SET FlightNumber ="+null+" WHERE CusUserName ="+username);
+		Flight.queryFlight(query);
+	}
+	
 	
 	
 	

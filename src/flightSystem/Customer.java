@@ -1,5 +1,11 @@
 
 package flightSystem;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+
 /**
  * This class creates a customer constructor for a flight booking system
  * Customers have a first name, last name, ssn, address, state of residence, zip, email ,username, password, and security question and answer
@@ -54,7 +60,7 @@ public class Customer extends Person implements Database {
 	 * @param newSecurityQuestion
 	 * @param newSecurityAnswer
 	 */
-	public Customer(Customer c){
+	public Customer(Customer c){ //Whats this? customer that makes customer
 		super.setFirstName(c.getFirstName());
 		super.setLastName(c.getLastName());
 		super.setSSN(c.getSSN());
@@ -70,6 +76,10 @@ public class Customer extends Person implements Database {
 		this.securityQuestionAnswer = c.getSecurityQuestionAnswer();
 		
 	}
+	//Customer(String Uname, String Pword){
+		
+	//}
+	
 	/**
 	 * Creates customer object from outputs of database. System holds this object until the customer logouts.
 	 * @param newAccountNumber
@@ -104,6 +114,15 @@ public class Customer extends Person implements Database {
 		this.securityQuestionAnswer = newAnswer;
 		
 	}
+	void printCustomerOn(int FlightNumber){
+		String user = "root";
+		String password = "adamyouknowit";
+		Class.forName("com.mysql.jdbc.Driver");
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Statement statement = connection.createStatement();
+		ResultSet resultSet = statement.executeQuery(
+	}
+	
 	/**Method that returns username*/
 	public String getUserName(){
 		return userName;
