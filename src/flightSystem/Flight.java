@@ -21,8 +21,8 @@ public class Flight {
 	String flightTime;
 	double flightCost; //same
 	static int numOfFlights=0;
-	final String USER = "Admin";
-	final String PASSWORD = "Arson8629";
+	final static String USER = "Admin";
+	final static String PASSWORD = "Arson8629";
 	
 	Flight(){
 		
@@ -75,25 +75,25 @@ public class Flight {
 		}
 		
 	}
-	int insertTimeD(){ //makse sure no code inserts time or date as String into database..wont work
-		int time=0;
-		time +=10_000*Integer.parseInt(this.flightTime.substring(0,2));
-		time +=100*Integer.parseInt(this.flightTime.substring(3, 5));
-		time +=Integer.parseInt(this.flightTime.substring(6));
+	String insertTimeD(){ //makse sure no code inserts time or date as String into database..wont work
+		String time ="";
+		time = time +(this.flightTime.substring(0,2));
+		time = time +(this.flightTime.substring(3, 5));
+		time = time +(this.flightTime.substring(6));
 		return time;
 	}
-	int insertDurationD(){ //makse sure no code inserts time or date as String into database..wont work
-		int time=0;
-		time +=10_000*Integer.parseInt(this.flightDuration.substring(0,2));
-		time +=100*Integer.parseInt(this.flightDuration.substring(3, 5));
-		time +=Integer.parseInt(this.flightDuration.substring(6));
+	String insertDurationD(){ //makse sure no code inserts time or date as String into database..wont work
+		String time= "";
+		time = time +(this.flightDuration.substring(0,2));
+		time = time +(this.flightDuration.substring(3, 5));
+		time = time +(this.flightDuration.substring(6));
 		return time;
 	}
-	int insertDateD(){ //makse sure no code inserts time or date as String into database..wont work
-		int time=0;
-		time +=10_000*Integer.parseInt(this.flightDate.substring(0,4));
-		time +=100*Integer.parseInt(this.flightDate.substring(5, 7));
-		time +=Integer.parseInt(this.flightDate.substring(8));
+	String insertDateD(){ //makse sure no code inserts time or date as String into database..wont work
+		String time="";
+		time = time +(this.flightDate.substring(0,4));
+		time = time +(this.flightDate.substring(5, 7));
+		time = time +(this.flightDate.substring(8));
 		return time;
 	}
 	
@@ -122,7 +122,7 @@ public class Flight {
 		queryFlight(query);
 	}
 	
-	public boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
+	public static boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
 		boolean worked=false;//didnt get anything
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
@@ -134,6 +134,7 @@ public class Flight {
 		return worked;
 	}
 	public void getFlight(int flightNumber) throws ClassNotFoundException, SQLException{ //flightNumber because is primary key
+		//tested
 		Scanner s = new Scanner(System.in);
 		//Load JDBC driver
 		Class.forName("com.mysql.jdbc.Driver");
@@ -144,6 +145,9 @@ public class Flight {
 				
 				Statement statement = connection.createStatement();
 				
+				while(worked(flightNumber)==false){//for if get a null because no current flight match requirement
+					System.out.println("Reenter a valid Flight Number");
+					flightNumber=s.nextInt();}
 				ResultSet resultSet = statement.executeQuery
 						("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
 								+ "FlightCapacity, OnFlight, FlightDuration"
@@ -151,9 +155,7 @@ public class Flight {
 								+ "WHERE FlightNumber ="+flightNumber);
 								
 				//might not want this
-				while(worked(flightNumber)==false){//for if get a null because no current flight match requirement
-					System.out.println("Reenter a valid Flight Number");
-					flightNumber=s.nextInt();}
+				
 				//might not want this stop
 				//if decide to replace add worked=false back
 				while(resultSet.next()){
@@ -172,7 +174,7 @@ public class Flight {
 				//	System.out.println("Flight number "+flightNumber+" does not exist");
 	}
 				
-	 public void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
+	 public static void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
 		if(worked(flightNum)==false){ //worked true means entry already exist
 			System.out.println("A flight by this number does not exist");
 			Scanner s = new Scanner(System.in);

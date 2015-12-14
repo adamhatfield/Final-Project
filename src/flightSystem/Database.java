@@ -60,6 +60,8 @@ public interface Database {
 				String passwordSQL = login.getString(2);
 				//System.out.print(userNameSQL+ " " +passwordSQL);
 				if(userName.equals(userNameSQL) && password.equals(passwordSQL))
+					//>new add<//
+					
 					return true;
 				
 			}

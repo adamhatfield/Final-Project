@@ -22,7 +22,9 @@ public class Customer extends Person implements Database {
 	private String securityQuestion;
 	private String securityQuestionAnswer;
 	private int accountNumber;
+	int flightNumber1=0;
 	private ArrayList<Integer> flightNumber = new ArrayList<>();
+	static String loggedInUser=null; //this is how we will montior logged in users
 	
 	/**Default no-arg Constructor*/
 	public Customer(){
@@ -44,7 +46,7 @@ public class Customer extends Person implements Database {
 		this.password = newPassword;
 		this.emailAddress = newEmailAddress;
 		this.accountNumber = (int) (1000 + Math.random() * 9000);
-		this.flightNumber.add(0);
+	
 
 	}
 	
@@ -84,6 +86,18 @@ public class Customer extends Person implements Database {
 		this.flightNumber = flightNumber;
 		
 	}
+	/***for bookflight**///////
+	static String getloggedIn(){
+	 //this is how we will montior logged in users
+	return loggedInUser;
+	}
+	static void setLogin(String username){
+	loggedInUser=username;
+	}
+	static void removeLogin(){
+	loggedInUser=null;
+	}
+	//**end**/
 	/**
 	void printCustomerOn(int FlightNumber){
 		String user = "root";
