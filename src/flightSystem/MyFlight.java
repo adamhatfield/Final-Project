@@ -11,6 +11,7 @@ public class MyFlight implements Database, Editting{
 	final static String PASSWORD = "adamyouknowit";
 	final static String DNAME = "jdbc:mysql://127.0.0.1/project";
 	
+	
 public static void myFlight() throws Exception{
 //will need to login in to view
 	//first action press

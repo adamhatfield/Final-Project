@@ -18,12 +18,12 @@ public class BookFlight implements Database,Editting {
 	public static void bookFlight() throws Exception{
 		Scanner input = new Scanner(System.in);
 	System.out.println("Book Flight Menu\n");
-	System.out.println("From");//must be city
-	String from = input.nextLine(); //scans full string
-	System.out.println("To");//must be city
-	String to = input.nextLine();
-	System.out.println("Depart Date(yyyy-mm-dd)");//format yyyy-mm-dd
-	String ddate = input.nextLine();
+	//must be city
+	String from = Editting.scannerFix("From"); //scans full string
+	//must be city
+	String to = Editting.scannerFix("To");
+	//format yyyy-mm-dd
+	String ddate = Editting.scannerFix("Depart Date(yyyy-mm-dd)");
 	//need to add return date to database
 //	System.out.println("Return Date");
 //	String Return = input.nextLine();
