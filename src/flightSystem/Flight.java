@@ -40,26 +40,30 @@ public class Flight {
 		/** Checks if entered flightnumber already exists in the database
 		 * Prompts user to re-enter a flight number using pop up messages
 		 * until a valid NEW flightnumber is entered*/
-		if(worked(flightNum)){ //worked true means entry already exist
-			String flightNumber = JOptionPane.showInputDialog("That flight number already exists, please re-enter the flight number:");
-			flightNum = Integer.parseInt(flightNumber);
+	//	if(worked(flightNum)){ //worked true means entry already exist
+			//String flightNumber = JOptionPane.showInputDialog("That flight number already exists, please re-enter the flight number:");
+			//flightNum = Integer.parseInt(flightNumber);
+		//	flightNum = s.nextInt();
 			while(worked(flightNum)){
-				 flightNumber = JOptionPane.showInputDialog("That flight number already exists, please re-enter the flight number:");
-				flightNum = Integer.parseInt(flightNumber);
-			}
+				System.out.println("That flight number already exists, please re-enter the flight number:");
+				// flightNumber = JOptionPane.showInputDialog("That flight number already exists, please re-enter the flight number:");
+				flightNum = s.nextInt();
+				//flightNum = Integer.parseInt(flightNumber);
+		//	}
 			
 		}
-		else {
-			flightDate=date;
-			flightDuration=duration;
-			flightTime=time;
+		//else {
+			this.flightDate=date;
+			this.flightDuration=duration;
+			this.flightTime=time;
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery("INSERT into FLIGHT(FlightNumber, FlightDestination,"
-				+ " FlightStartPoint, FlightDuration, FlightDate, Flight TIme,"
-				+ " FlightCost, FlightCapacity, OnFlight)VALUES ("+flightNum+",'"+destination+"','"+start+"',"+this.insertDurationD()+","+this.insertDateD()+""
-						+ ","+this.insertTimeD()+","+cost+","+flightCap+","+onFl);
+		
+		String query="insert into FLIGHT (FlightNumber, FlightDestination,FlightStartPoint,FlightDuration,FlightDate,FlightTime,FlightCost,FlightCapacity,OnFlight)"
+				+ " VALUES("+flightNum+",'"+destination+"', '"+start+"', "+this.insertDurationD()+", "+this.insertDateD()+", "+this.insertTimeD()+", "+cost+", "
+						+ ""+flightCap+", "+onFl+")";
+		statement.executeUpdate(query);
 		//creation ended
 		//after created can use as normal flight that is in database
 		numOfFlights++;
@@ -72,7 +76,7 @@ public class Flight {
 		//flightDuration=duration;
 		//flightTime=time;
 		flightCost=cost;
-		}
+		//}
 		
 	}
 	String insertTimeD(){ //makse sure no code inserts time or date as String into database..wont work
@@ -203,7 +207,7 @@ public class Flight {
 			}
 		}
 	}
-	public void printFlight() throws ClassNotFoundException, SQLException	{
+	public static void printFlight() throws ClassNotFoundException, SQLException	{ //static because u dont need object to use. doesnt make sense
 		Class.forName("com.mysql.jdbc.Driver");
 		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
 		Statement statement = connection.createStatement();
