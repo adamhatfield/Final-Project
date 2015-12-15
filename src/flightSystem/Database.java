@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import javax.swing.JOptionPane;
 public interface Database { 
 	  
-	
 	 String user = "admin";
 	 String password = "Arson8629";
 	 String databaseCommit = "COMMIT";
@@ -144,7 +143,7 @@ public interface Database {
 	default void queryCustomer(String query) throws ClassNotFoundException, SQLException{
 		
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",user,password);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(query);
 		//if trying to print results of query
@@ -162,7 +161,7 @@ public interface Database {
 	//for quick updates
 	  default void queryFlight(String query) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",user,password);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(query);
 		//if trying to print results of query
@@ -172,11 +171,13 @@ public interface Database {
 		
 	}
 	  /**Method that returns a flight object that matches the corresponding departure and destination from search flight view.*/
-	  default Flight findFlight(String departure, String destination) throws ClassNotFoundException, SQLException{
+	  default Flight findFlight(String departure, String destination, String newDate ) throws ClassNotFoundException, SQLException{
 		  Flight f = new Flight();
 		  String query = ("SELECT FlightNumber, FlightDestination, FlightStartPoint, FlightDuration, FlightDate, FlightTime FlightCost, FlightCapacity, OnFlight"
-				+ "FROM Flight WHERE Flight.FlightStartPoint = '"+departure+"' and Flight.FlightDestination = '"+destination+"' ");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",user,password);
+				+ "FROM Flight WHERE Flight.FlightStartPoint = '"+departure+"' and Flight.FlightDestination = '"+destination+"' and Flight.FlightDate = '"+newDate+"' ");
+		  
+		try{
+		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",user,password);
 		Statement statement = connection.createStatement();
 		ResultSet rs = statement.executeQuery(query);
 		
@@ -192,8 +193,11 @@ public interface Database {
 		int reserved = rs.getInt(9);
 		
 		 f = new Flight( flightNumber, capacity, reserved, destin, start, date, duration, time,  cost);
-		
 		}
+		}catch(Exception e){
+		e.printStackTrace();	
+		}
+		
 		
 		
 		
@@ -201,7 +205,44 @@ public interface Database {
 		  return f;
 		  
 	  }
-	
+	  
+	  /**
+	   * isAdmin Method
+	   * This method returns true is the username used during login matches the username of an admin in the database
+	   * @param userName
+	   * @return
+	   * @throws SQLException
+	   */
+	  default boolean isAdmin(String userName) throws SQLException{
+		  String userNameServer = "";
+		  String query = " SELECT ADMUserName FROM ADMIN WHERE Admin.ADMUserName = '"+userName+ "'";
+		  Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",user,password);
+			Statement statement = connection.createStatement();
+			ResultSet rs = statement.executeQuery(query);
+			while(rs.next()){
+				 userNameServer = rs.getString(1);
+			}
+			
+			if(userNameServer.equalsIgnoreCase(userName))
+				return true;
+			else
+				return false;
+			
+			
+	  }
+	  /**
+	   * Method that deletes a flight from the database
+	   * @param flightNum
+	   * @throws ClassNotFoundException
+	   * @throws SQLException
+	   */
+	  default void deleteFlight(int flightNum) throws ClassNotFoundException, SQLException{
+			String query =("DELETE FROM Flight WHERE FlightNumber ="+flightNum);
+			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem","admin","Arson8629");
+			Statement s = connection.createStatement();
+			s.executeUpdate(query);
+			s.executeQuery(databaseCommit);
+		}
 	
 	
 	
