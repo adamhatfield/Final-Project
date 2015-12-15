@@ -68,7 +68,7 @@ public static void myFlight() throws Exception{
 	
 		System.out.println("This is the My Flight Menus \n Below see the flights you have book "+c.getLastName());
 		int i =0;
-		while(i<c.flightNumber.size()){
+		while(i<c.flightNumber.size()){ //prints flights
 		System.out.println("Your number "+ (i+1) +" is "+c.flightNumber.get(i));
 		i++;
 		}
@@ -77,6 +77,8 @@ public static void myFlight() throws Exception{
 		Flight.printFlight(chooseF);
 		//have a go back button
 		
+		
+		//menu
 		//from here
 		System.out.println("Press 1 if you want to cancel this flight");
 		//System.out.println("Press 2 if you want to check for delays"); // dont feel like doing now so greying it out for now lol
