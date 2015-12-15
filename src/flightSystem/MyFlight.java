@@ -25,17 +25,35 @@ public static void myFlight() throws Exception{
 		System.out.println("2.) Login");
 		int xx= input.nextInt();
 		//////both I
-		if(xx==1){
+		if(xx==1){//if click my flight and need to create an account
 			//insert ADAM create new customer method
 			System.out.println("Enter in First Name");
+			String fn=input.nextLine();
 			System.out.println("Enter in Last Name");
+			String ln=input.nextLine();
 			System.out.println("Enter in SSN");
+			int sss=input.nextInt();
 			System.out.println("Enter in Address");
+			String ad=input.nextLine();
 			System.out.println("Enter in Zip");
+			int zip=input.nextInt();
 			System.out.println("Enter in City");
-			System.out.println("Enter in State");
+			String cc=input.nextLine();
+			System.out.println("Enter in Full State Name");
+			String st=input.nextLine();
 			System.out.println("Enter in User Name");
-			System.out.println("Enter in First Name");
+			String us=input.nextLine();
+			System.out.println("Enter in Password");
+			String pass=input.nextLine();
+			System.out.println("Enter in Email");
+			String ema=input.nextLine();
+			System.out.println("Enter in Security Question");
+			String ssq=input.nextLine();
+			System.out.println("Enter in Security Question Answer");
+			String aw=input.nextLine();
+			Customer c = new Customer(us,pass,ema,fn,ln,ad,cc,st,zip,sss,ssq,aw);
+			Customer.setLogin(us);
+			
 			//thru that method login should become active
 			//then think popup
 		}

@@ -33,8 +33,8 @@ public class Customer extends Person implements Database {
 	/**Creates a customer objects with specified name, address, social security number, username and password
 	 * For the new user tab
 	 * */
-	public Customer( String newUserName,String newPassword,String newEmailAddress,String newFirstName,String newLastName,String newAddress,
-			String newCity,String newState, int newZipCode, int newSSN,String newSecurityQuestion,String newSecurityAnswer){
+	public Customer( String newUserName,String newPassword,String newEmailAddress,String newFirstName,String newLastName,
+			String newAddress,String newCity,String newState, int newZipCode, int newSSN,String newSecurityQuestion,String newSecurityAnswer){
 		super.setFirstName(newFirstName);
 		super.setLastName(newLastName);
 		super.setSSN(newSSN);
@@ -46,8 +46,10 @@ public class Customer extends Person implements Database {
 		this.password = newPassword;
 		this.emailAddress = newEmailAddress;
 		this.accountNumber = (int) (1000 + Math.random() * 9000);
-	
-
+		flightNumber.add(0);
+		//security question? werent here before but u were recieving 
+		securityQuestion =newSecurityQuestion;
+		securityQuestionAnswer=newSecurityAnswer;
 	}
 	
 	
@@ -88,25 +90,6 @@ public class Customer extends Person implements Database {
 		flightNumber.add(0);
 		
 	}
-	public Customer(String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, 
-			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer){
-		super.setFirstName(newFirstName);
-		super.setLastName(newLastName);
-		super.setSSN(newSSN);
-		super.setAddress(newAddress);
-		super.setZipCode(newZip);
-		super.setCity(newCity);
-		super.setState(newState);
-		this.userName = newUserName;
-		this.password = newPassword;
-		this.emailAddress = newEmail;
-		this.accountNumber = (int) (1000 + Math.random() * 9000);
-		this.securityQuestion = newSecurityQuestion;
-		this.securityQuestionAnswer = newAnswer;
-		flightNumber.add(0);
-		
-	}
-	
 	
 	
 	/***for bookflight**///////
