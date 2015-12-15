@@ -16,6 +16,7 @@ public class Home implements Database,Editting{
 		System.out.println("Flight Status");
 		
 		AdminView.adminView();//AdminView
+		MyFlight.myFlight();//ViewOfCustomerFlights and they can remove flights
 		BookFlight.bookFlight();//BooksFlight
 					 }
 					 

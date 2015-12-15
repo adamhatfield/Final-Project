@@ -22,8 +22,8 @@ public class Customer extends Person implements Database {
 	private String securityQuestion;
 	private String securityQuestionAnswer;
 	private int accountNumber;
-	int flightNumber1=0;
-	private ArrayList<Integer> flightNumber = new ArrayList<>();
+	public ArrayList<Integer> flightNumber = new ArrayList<>();
+	
 	static String loggedInUser=null; //this is how we will montior logged in users
 	
 	/**Default no-arg Constructor*/
@@ -86,6 +86,10 @@ public class Customer extends Person implements Database {
 		this.flightNumber = flightNumber;
 		
 	}
+	
+	
+	
+	
 	/***for bookflight**///////
 	static String getloggedIn(){
 	 //this is how we will montior logged in users
@@ -94,7 +98,7 @@ public class Customer extends Person implements Database {
 	static void setLogin(String username){
 	loggedInUser=username;
 	}
-	static void removeLogin(){
+	static void loginOut(){
 	loggedInUser=null;
 	}
 	//**end**/
@@ -107,7 +111,9 @@ public class Customer extends Person implements Database {
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(
 	}*/
-	
+	public void printCusFlights(){
+		
+	}
 	/**Method that returns username*/
 	public String getUserName(){
 		return userName;
