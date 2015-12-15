@@ -27,13 +27,14 @@ public class Flight {
 	Flight(){
 		
 	}
-	
+	//tested
 	Flight(int numOfDateBaseFlight) throws ClassNotFoundException, SQLException{
 		//MAKES FLIGHT OUT OF DATABASE STORED FLIGHT
 		numOfFlights++;
 		getFlight(numOfDateBaseFlight);
 		
 	}
+	//tested
 	Flight(int flightNum,int flightCap, int onFl, String destination, String start, String date, String duration, String time, double cost) throws ClassNotFoundException, SQLException{ //create a flight Not in database
 		//creates new flight in database first
 		Scanner s = new Scanner(System.in);
@@ -79,6 +80,7 @@ public class Flight {
 		//}
 		
 	}
+	//tested
 	String insertTimeD(){ //makse sure no code inserts time or date as String into database..wont work
 		String time ="";
 		time = time +(this.flightTime.substring(0,2));
@@ -86,6 +88,7 @@ public class Flight {
 		time = time +(this.flightTime.substring(6));
 		return time;
 	}
+	//tested
 	String insertDurationD(){ //makse sure no code inserts time or date as String into database..wont work
 		String time= "";
 		time = time +(this.flightDuration.substring(0,2));
@@ -93,6 +96,7 @@ public class Flight {
 		time = time +(this.flightDuration.substring(6));
 		return time;
 	}
+	//tested
 	String insertDateD(){ //makse sure no code inserts time or date as String into database..wont work
 		String time="";
 		time = time +(this.flightDate.substring(0,4));
@@ -102,30 +106,33 @@ public class Flight {
 	}
 	
 	void databaseFlight() throws ClassNotFoundException, SQLException{
+		//what ever is in Flight object for example f... is updated into the database
 		Scanner s = new Scanner(System.in);
 		if(worked(this.flightNumber)){ //worked true means entry already exist
 			System.out.println("A flight by this number already exist\n"
 					+ "Are you sure you want to OVERWRITE. If so press 1 or press 2 for NO");}
+		else {
+			System.out.println("A flight by this number doesn't exist. Do you want to create this flight?\n"
+					+ "If yes ");
+		}
 			int yes=s.nextInt();
 			if(yes==1){
-				Class.forName("com.mysql.jdbc.Driver");
-				Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
-				Statement statement = connection.createStatement();
-				ResultSet resultSet = statement.executeQuery("UPDATE FLIGHT SET FlightNumber ="+this.flightNumber+" FlightDestination ='"+this.flightDestination+"'"
+				String query =("UPDATE FLIGHT SET FlightNumber ="+this.flightNumber+" FlightDestination ='"+this.flightDestination+"'"
 						+ " FlightStartPoint = '"+this.flightStartPoint+"' FlightDuration = "+this.insertDurationD()+" "
 								+ "FlightDate = "+this.insertDateD()+" FlightTime = "+this.insertTimeD()+" FlightCost = "+this.flightCost+" "
 										+ "FlightCapacity = "+this.flightCapacity+" OnFlight ="+this.onFlight+" WHERE FlightNumber"
 												+ " = "+this.flightNumber);
+				queryFlight(query);
 				
 				
 	}
 	}
-	
-	public void deleteFlight(int flightNum) throws ClassNotFoundException, SQLException{
+	//tested
+	public static void deleteFlight(int flightNum) throws ClassNotFoundException, SQLException{
 		String query =("DELETE FROM Flight WHERE FlightNumber ="+flightNum);
 		queryFlight(query);
 	}
-	
+	//tested
 	public static boolean worked (int flightNumber) throws ClassNotFoundException, SQLException{
 		boolean worked=false;//didnt get anything
 		Class.forName("com.mysql.jdbc.Driver");
@@ -136,9 +143,10 @@ public class Flight {
 		while(resultSet.next())
 			worked=true; //got something
 		return worked;
-	}
+	}	
+	//tested
 	public void getFlight(int flightNumber) throws ClassNotFoundException, SQLException{ //flightNumber because is primary key
-		//tested
+
 		Scanner s = new Scanner(System.in);
 		//Load JDBC driver
 		Class.forName("com.mysql.jdbc.Driver");
@@ -177,8 +185,9 @@ public class Flight {
 				//if (worked==false)
 				//	System.out.println("Flight number "+flightNumber+" does not exist");
 	}
+	//tested
 				
-	 public static void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
+	public static void printFlight(int flightNum) throws ClassNotFoundException, SQLException	{
 		if(worked(flightNum)==false){ //worked true means entry already exist
 			System.out.println("A flight by this number does not exist");
 			Scanner s = new Scanner(System.in);
@@ -200,44 +209,48 @@ public class Flight {
 		while(resultSet.next()){
 			System.out.println("FlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t"
 					+ "FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
-			System.out.println(resultSet.getInt(9)+"\t"+resultSet.getInt(5)+"\t"+resultSet.getInt(6)+""
-					+ "\t"+resultSet.getString(1)+"\t"+resultSet.getString(3)+"\t"+resultSet.getString(4)+""
+			System.out.println(resultSet.getInt(9)+"\t\t"+resultSet.getInt(5)+"\t\t"+resultSet.getInt(6)+""
+					+ "\t\t"+resultSet.getString(1)+"\t\t\t"+resultSet.getString(3)+"\t\t\t"+resultSet.getString(4)+""
 							+ "\t"+resultSet.getString(8)+"\t"+resultSet.getString(7)+"\t"
 									+ ""+resultSet.getDouble(2));
 			}
 		}
 	}
-	public static void printFlight() throws ClassNotFoundException, SQLException	{ //static because u dont need object to use. doesnt make sense
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
-		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery
-				("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
-				+ "FlightCapacity, OnFlight, FlightDuration"
-				+ ", FlightTime, FlightNumber FROM FLIGHT");
-		int i=0; //just for count
-		System.out.println("FlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t"
-				+ "FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
-		while(resultSet.next()){
-			System.out.println(++i +").\t"+resultSet.getInt(9)+"\t"+resultSet.getInt(5)+"\t"+resultSet.getInt(6)+""
-					+ "\t"+resultSet.getString(1)+"\t"+resultSet.getString(3)+"\t"+resultSet.getString(4)+""
-							+ "\t"+resultSet.getString(8)+"\t"+resultSet.getString(7)+"\t"
-									+ ""+resultSet.getDouble(2));
-			}
-	}
+	//tested
+		public static void printFlight() throws ClassNotFoundException, SQLException	{
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
+			Statement statement = connection.createStatement();
+			ResultSet resultSet = statement.executeQuery
+					("SELECT FlightStartPoint, FlightCost, FlightDestination, FlightDate, "
+					+ "FlightCapacity, OnFlight, FlightDuration"
+					+ ", FlightTime, FlightNumber FROM FLIGHT");
+			int i=0; //just for count
+			System.out.println("\tFlightNumber\tFlightCapacity\tOnFlight\tFlightStartPoint\t"
+					+ "FlightDestination\tFlightDate\tFlightTime\tFlightDuration\tFlightPrice");
+			while(resultSet.next()){
+				System.out.println(++i +").\t"+resultSet.getInt(9)+"\t\t"+resultSet.getInt(5)+"\t\t"+resultSet.getInt(6)+""
+						+ "\t\t"+resultSet.getString(1)+"\t\t\t"+resultSet.getString(3)+"\t\t\t"+resultSet.getString(4)+""
+						+ "\t"+resultSet.getString(8)+"\t"+resultSet.getString(7)+"\t"
+								+ ""+resultSet.getDouble(2));
+		
+				}
+		}
 	//found purpose
 	//for quick updates
-	 public void queryFlight(String query) throws ClassNotFoundException, SQLException{
-		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
-		Statement statement = connection.createStatement();
-		ResultSet resultSet = statement.executeQuery(query);
-		//if trying to print results of query
-		//while(resultSet.next()){
-			
-		//}
-		
-	}
+	//tested
+		 public static void queryFlight(String query) throws ClassNotFoundException, SQLException{
+				
+				Class.forName("com.mysql.jdbc.Driver");
+				Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
+				Statement statement = connection.createStatement();
+				statement.executeUpdate(query);
+				//if trying to print results of query
+				//while(resultSet.next()){
+					
+				//}
+				
+			}
 	 
 	 
 	public int getFlightNumber() {
