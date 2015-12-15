@@ -27,6 +27,15 @@ public static void myFlight() throws Exception{
 		//////both I
 		if(xx==1){
 			//insert ADAM create new customer method
+			System.out.println("Enter in First Name");
+			System.out.println("Enter in Last Name");
+			System.out.println("Enter in SSN");
+			System.out.println("Enter in Address");
+			System.out.println("Enter in Zip");
+			System.out.println("Enter in City");
+			System.out.println("Enter in State");
+			System.out.println("Enter in User Name");
+			System.out.println("Enter in First Name");
 			//thru that method login should become active
 			//then think popup
 		}

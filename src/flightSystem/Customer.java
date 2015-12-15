@@ -69,7 +69,9 @@ public class Customer extends Person implements Database {
 	 */
 	
 	public Customer(int newAccountNumber,String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, 
-			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer,ArrayList<Integer> flightNumber){
+			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer){
+		//why is there an accountNumber
+		//why is customer defining customer accountNumber?
 		super.setFirstName(newFirstName);
 		super.setLastName(newLastName);
 		super.setSSN(newSSN);
@@ -83,10 +85,27 @@ public class Customer extends Person implements Database {
 		this.accountNumber = newAccountNumber;
 		this.securityQuestion = newSecurityQuestion;
 		this.securityQuestionAnswer = newAnswer;
-		this.flightNumber = flightNumber;
+		flightNumber.add(0);
 		
 	}
-	
+	public Customer(String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, 
+			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer){
+		super.setFirstName(newFirstName);
+		super.setLastName(newLastName);
+		super.setSSN(newSSN);
+		super.setAddress(newAddress);
+		super.setZipCode(newZip);
+		super.setCity(newCity);
+		super.setState(newState);
+		this.userName = newUserName;
+		this.password = newPassword;
+		this.emailAddress = newEmail;
+		this.accountNumber = (int) (1000 + Math.random() * 9000);
+		this.securityQuestion = newSecurityQuestion;
+		this.securityQuestionAnswer = newAnswer;
+		flightNumber.add(0);
+		
+	}
 	
 	
 	
