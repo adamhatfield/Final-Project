@@ -9,7 +9,7 @@ import java.util.Scanner;
 public class MyFlight implements Database, Editting{
 	final static String USER = "root";
 	final static String PASSWORD = "adamyouknowit";
-
+	final static String DNAME = "jdbc:mysql://127.0.0.1/project";
 	
 public static void myFlight() throws Exception{
 //will need to login in to view
@@ -17,40 +17,33 @@ public static void myFlight() throws Exception{
 	//after press
 	//if not logged 
 	Scanner input = new Scanner (System.in);
+	Scanner xxx=new Scanner(System.in);
 	if(Customer.loggedInUser==null){
 		
 		//insert adam login method
 		//press create a new account or login for now will do scanner
 		System.out.println("1.) Create a new account");
 		System.out.println("2.) Login");
-		int xx= input.nextInt();
+		int xx= xxx.nextInt();
 		//////both I
 		if(xx==1){//if click my flight and need to create an account
 			//insert ADAM create new customer method
-			System.out.println("Enter in First Name");
-			String fn=input.nextLine();
-			System.out.println("Enter in Last Name");
-			String ln=input.nextLine();
+			//fix double print
+			int count=0;
+			String fn=Editting.scannerFix("Enter in First Name");
+			String ln=Editting.scannerFix("Enter in Last Name");
 			System.out.println("Enter in SSN");
 			int sss=input.nextInt();
-			System.out.println("Enter in Address");
-			String ad=input.nextLine();
+			String ad=Editting.scannerFix("Enter in Address");
 			System.out.println("Enter in Zip");
 			int zip=input.nextInt();
-			System.out.println("Enter in City");
-			String cc=input.nextLine();
-			System.out.println("Enter in Full State Name");
-			String st=input.nextLine();
-			System.out.println("Enter in User Name");
-			String us=input.nextLine();
-			System.out.println("Enter in Password");
-			String pass=input.nextLine();
-			System.out.println("Enter in Email");
-			String ema=input.nextLine();
-			System.out.println("Enter in Security Question");
-			String ssq=input.nextLine();
-			System.out.println("Enter in Security Question Answer");
-			String aw=input.nextLine();
+			String cc=Editting.scannerFix("Enter in City");
+			String st=Editting.scannerFix("Enter in Full State Name");
+			String us=Editting.scannerFix("Enter in User Name");
+			String pass=Editting.scannerFix("Enter in Password");
+			String ema=Editting.scannerFix("Enter in Email");
+			String ssq=Editting.scannerFix("Enter in Security Question");
+			String aw=Editting.scannerFix("Enter in Security Question Answer");
 			Customer c = new Customer(us,pass,ema,fn,ln,ad,cc,st,zip,sss,ssq,aw);
 			Customer.setLogin(us);//thru that method login should become active
 			Database.insertNewUser(c, 0);//0 for new users

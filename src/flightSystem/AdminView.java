@@ -7,7 +7,7 @@ public class AdminView implements Database,Editting {
 
 	final static String USER = "root";
 	final static String PASSWORD = "adamyouknowit";
-	
+	final static String DNAME = "jdbc:mysql://127.0.0.1/project";
 	
 	static void adminView() throws ClassNotFoundException, SQLException{
 	Scanner input = new Scanner(System.in);

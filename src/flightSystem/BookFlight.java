@@ -10,6 +10,7 @@ import java.util.Scanner;
 public class BookFlight implements Database,Editting {
 	final static String USER = "root";
 	final static String PASSWORD = "adamyouknowit";
+	final static String DNAME = "jdbc:mysql://127.0.0.1/project";
 	Scanner input = new Scanner(System.in);
 	//starting with Book Flight
 	///*************START BOOK FLIGHT********************
@@ -40,7 +41,7 @@ public class BookFlight implements Database,Editting {
 	Class.forName("com.mysql.jdbc.Driver");
 	//Establish connection
 	Connection connection = DriverManager.getConnection
-		("jdbc:mysql://127.0.0.1/project",USER,PASSWORD);
+		(DNAME,USER,PASSWORD);
 			Statement statement = connection.createStatement();
 			/*
 			 * ResultSet finds planes that fit customer schedule

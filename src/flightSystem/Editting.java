@@ -6,6 +6,14 @@ import java.util.Scanner;
 public interface Editting {
 	
 	Scanner s = new Scanner(System.in);
+	
+	
+	static String scannerFix(String text){
+	System.out.println(text);
+	String str;
+	str=s.nextLine();
+	return str;
+	}
 	static void removeFlight(){
 	Flight.numOfFlights--;
 	}

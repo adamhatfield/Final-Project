@@ -7,6 +7,7 @@ public interface Database {
 	  
 	final String USER = "root";
 	final String PASSWORD = "adamyouknowit";
+	final String DNAME = "jdbc:mysql://127.0.0.1/project";
 	 String databaseCommit = "COMMIT";
 	 
 	/**Initialize Database connection*/
@@ -15,7 +16,7 @@ public interface Database {
 			//Load JDBC driver
 			Class.forName("com.mysql.jdbc.Driver");
 			//Establish connection
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,PASSWORD);
+			Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 			
 			
 		}catch(Exception e){
@@ -34,7 +35,7 @@ public interface Database {
 				+customer.getEmailAddress()+"','"+customer.getFirstName()+"','"+customer.getLastName()+"','"+customer.getAddress()+"','"+customer.getCity()+"','"
 				+customer.getState()+"','"+customer.getZipCode()+"','"+customer.getSSN()+"','"+customer.getSecurityQuestion()+"','"+customer.getSecurityQuestionAnswer()+"','"+customer.flightNumber.get(arrayIndex)+"')";
 		try{
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,PASSWORD);
+			Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 			Statement s = connection.createStatement();
 			s.executeUpdate(query);
 			s.executeQuery(databaseCommit); //Automatically makes the database save any changes
@@ -55,7 +56,7 @@ public interface Database {
 				+customer.getEmailAddress()+"','"+customer.getFirstName()+"','"+customer.getLastName()+"','"+customer.getAddress()+"','"+customer.getCity()+"','"
 				+customer.getState()+"','"+customer.getZipCode()+"','"+customer.getSSN()+"','"+customer.getSecurityQuestion()+"','"+customer.getSecurityQuestionAnswer()+"','"+customer.flightNumber.get(0)+"')";
 		try{
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,PASSWORD);
+			Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 			Statement s = connection.createStatement();
 			s.executeUpdate(query);
 			s.executeQuery(databaseCommit); //Automatically makes the database save any changes
@@ -73,7 +74,7 @@ public interface Database {
 		String query = "select CusUserName, CusPassword from Customer where Customer.CusUserName = '"+userName+"' and Customer.CusPassword = '"+password+"'";
 		
 		try{
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,this.PASSWORD);
+			Connection connection = DriverManager.getConnection(DNAME,USER,this.PASSWORD);
 			Statement stmt = connection.createStatement();
 			ResultSet login = stmt.executeQuery(query);
 			if(login.next()){
@@ -109,7 +110,7 @@ public interface Database {
 		String query = "SELECT CusAccountNumber,CusUserName,CusPassword,CusEmailAddress,CusFirstName,CusLastName,"
 				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer,FlightNumber FROM Customer WHERE Customer.CusUserName ='"+userName+"'";
 		
-		Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,PASSWORD);
+		Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 		Statement stmt = connection.createStatement();
 		ResultSet customer = stmt.executeQuery(query);
 		int count =0;
@@ -152,7 +153,7 @@ public interface Database {
 	default void updatePassword(String userName, String password){
 		String query = "UPDATE Customer SET CusPassword ='"+password+ "' WHERE Customer.CusUserName = '" +userName+"'";
 		try{
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,password);
+			Connection connection = DriverManager.getConnection(DNAME,USER,password);
 			Statement s = connection.createStatement();
 			s.executeUpdate(query);
 			s.executeQuery(databaseCommit);
@@ -168,7 +169,7 @@ public interface Database {
 	static void queryCustomer(String query) throws ClassNotFoundException, SQLException{
 		
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",USER,PASSWORD);
+		Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		statement.executeUpdate(query);
 		//if trying to print results of query
@@ -179,7 +180,7 @@ public interface Database {
 	}
 	static void queryECustomer(String query) throws SQLException, ClassNotFoundException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",USER,PASSWORD);
+		Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 		Statement statement = connection.createStatement();
 	//	String guery="Select FlightNumber FROM Customer WHERE CusUserNAME ='"+cusUserName"'";
 		ResultSet resultSet = statement.executeQuery(query);
@@ -189,7 +190,7 @@ public interface Database {
 	}
 	static void moreFlightsCus(int FlightNumber) throws SQLException, ClassNotFoundException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",USER,PASSWORD);
+		Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 		Statement statement = connection.createStatement();
 	//	ResultSet resultSet = statement.executeQuery(query);
 	}//not finshed but tired lol
@@ -204,7 +205,7 @@ public interface Database {
 	//for quick updates
 	  default void queryFlight(String query) throws ClassNotFoundException, SQLException{
 		Class.forName("com.mysql.jdbc.Driver");
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",USER,PASSWORD);
+		Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		ResultSet resultSet = statement.executeQuery(query);
 		//if trying to print results of query
@@ -220,7 +221,7 @@ public interface Database {
 				+ "FROM Flight WHERE Flight.FlightStartPoint = '"+departure+"' and Flight.FlightDestination = '"+destination+"' and Flight.FlightDate = '"+newDate+"' ");
 		  
 		try{
-		Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",USER,PASSWORD);
+		Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 		Statement statement = connection.createStatement();
 		ResultSet rs = statement.executeQuery(query);
 		
@@ -259,7 +260,7 @@ public interface Database {
 	  default boolean isAdmin(String userName) throws SQLException{
 		  String userNameServer = "";
 		  String query = " SELECT ADMUserName FROM ADMIN WHERE Admin.ADMUserName = '"+userName+ "'";
-		  Connection connection = DriverManager.getConnection("jdbc:mysql://127.0.0.1/flightsystem",USER,PASSWORD);
+		  Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 			Statement statement = connection.createStatement();
 			ResultSet rs = statement.executeQuery(query);
 			while(rs.next()){
@@ -281,7 +282,7 @@ public interface Database {
 	   */
 	  default void deleteFlight(int flightNum) throws ClassNotFoundException, SQLException{
 			String query =("DELETE FROM Flight WHERE FlightNumber ="+flightNum);
-			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,PASSWORD);
+			Connection connection = DriverManager.getConnection(DNAME,USER,PASSWORD);
 			Statement s = connection.createStatement();
 			s.executeUpdate(query);
 			s.executeQuery(databaseCommit);
