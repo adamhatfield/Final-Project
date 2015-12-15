@@ -1,11 +1,11 @@
 package flightSystem;
 import javax.swing.JFrame;
+
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.text.JTextComponent;
 import javax.swing.text.NumberFormatter;
-import javax.swing.DefaultListModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -13,12 +13,8 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JLayeredPane;
 import java.awt.FlowLayout;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.CardLayout;
 import java.awt.GridLayout;
-import java.awt.Insets;
-
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
@@ -28,14 +24,19 @@ import java.sql.*;
 import java.text.NumberFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 
 import javax.swing.JInternalFrame;
 import javax.swing.JFormattedTextField;
 import javax.swing.JPasswordField;
 import javax.swing.JList;
 import javax.swing.JTextPane;
+import javax.swing.border.BevelBorder;
+import javax.swing.JScrollBar;
+import java.awt.GridBagLayout;
+import java.awt.GridBagConstraints;
+import java.awt.Insets;
 import javax.swing.border.LineBorder;
-
 import java.awt.Color;
 
 public class TestGUI extends JFrame implements Database {
@@ -99,6 +100,12 @@ public class TestGUI extends JFrame implements Database {
 	private JTextField txtFlightCost;
 	private JButton btnEditFlight;
 	private JButton btnCreateFlight;
+	protected ArrayList<Flight> flightArray = new ArrayList<>();
+	protected ArrayList<Customer> customerArray = new ArrayList<>();
+	private JPanel panelViewFlights;
+	private JList list;
+	private JTextField textField;
+	private JButton btnNewButton_1;
 	
 	public TestGUI() {
 		
@@ -113,14 +120,14 @@ public class TestGUI extends JFrame implements Database {
 		 JPanel panelNewUser = new JPanel();
 		getContentPane().add(panelNewUser, "New User Window");
 		panelNewUser.setVisible(false);
-		
-	
-		 
-		 
-		 
+		/*******************************************************************************
+		 * panelEditFlights allows an admin to add flights to database, delete flights
+		 * and edit flights.
+		 * Only appears if an admin is logged in
+		 *******************************************************************************/
 		 panelEditFlights = new JPanel();
 		 panelEditFlights.setVisible(false);
-		 getContentPane().add(panelEditFlights, "name_14542072510937");
+		 getContentPane().add(panelEditFlights, "Edit Flights");
 		 GridBagLayout gbl_panelEditFlights = new GridBagLayout();
 		 gbl_panelEditFlights.columnWidths = new int[]{127, 114, 218, 117, 0};
 		 gbl_panelEditFlights.rowHeights = new int[]{96, 167, 57, 16, 29, 0};
@@ -200,7 +207,7 @@ public class TestGUI extends JFrame implements Database {
 		 txtFlightCapacity.setColumns(10);
 		 
 		 txtFlightTime = new JTextField();
-		 txtFlightTime.setText("Flight Time (0830)");
+		 txtFlightTime.setText("66:21:02");
 		 GridBagConstraints gbc_txtFlightTime = new GridBagConstraints();
 		 gbc_txtFlightTime.insets = new Insets(0, 0, 5, 5);
 		 gbc_txtFlightTime.fill = GridBagConstraints.HORIZONTAL;
@@ -240,7 +247,7 @@ public class TestGUI extends JFrame implements Database {
 		 txtDestination.setColumns(10);
 		 
 		 txtDate = new JTextField();
-		 txtDate.setText("Date 20160101");
+		 txtDate.setText("2016-01-10");
 		 GridBagConstraints gbc_txtDate = new GridBagConstraints();
 		 gbc_txtDate.insets = new Insets(0, 0, 5, 5);
 		 gbc_txtDate.fill = GridBagConstraints.HORIZONTAL;
@@ -258,12 +265,53 @@ public class TestGUI extends JFrame implements Database {
 		 gbc_txtDeparture.gridy = 4;
 		 panelAddFlight.add(txtDeparture, gbc_txtDeparture);
 		 txtDeparture.setColumns(10);
-		 
+		
+		 /*****************************************************************
+		  * Creates a new flight in the database 
+		  * and stores a copy of the flight object in the flight arrayList
+		  ****************************************************************/
 		 btnCreateFlight = new JButton("Create Flight");
 		 btnCreateFlight.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
 		 		String stringFlightNumber = jtfAddFlightNumber.getText();
 		 		String stringFlightCapacity = txtFlightCapacity.getText();
+		 		String stringOnFlight = txtOnFlight.getText();
+		 		String destination = txtDestination.getText();
+		 		String departure = txtDeparture.getText();
+		 		String date = txtDate.getText();
+		 		String duration = txtFlightDuration.getText();
+		 		String time = txtFlightTime.getText();
+		 		String stringCost = txtFlightCost.getText();
+		 		
+		 		try{
+		 			int flightNumber = Integer.parseInt(stringFlightNumber);
+		 			int flightCapacity = Integer.parseInt(stringFlightCapacity);
+		 			int onFlight = Integer.parseInt(stringOnFlight);
+		 			double cost = Double.parseDouble(stringCost);
+		 			
+		 			f = new Flight(flightNumber,flightCapacity,onFlight, destination,departure,date,duration,time,cost);
+		 			flightArray.add(f);
+		 			
+		 			System.out.print(flightArray.isEmpty());
+		 			
+		 		}catch(ClassNotFoundException c){
+		 			c.printStackTrace();
+		 		} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}finally{//Reset add field for next flight
+					JOptionPane.showMessageDialog(null, "The Flight was successfully added.");
+					jtfAddFlightNumber.setText("Flight Number ");
+					txtFlightCapacity.setText("Flight Capacity(0-100)");
+					txtOnFlight.setText("On Flight");
+					txtDestination.setText("Destination");
+					txtDeparture.setText("Departure");
+					txtDate.setText("2016-01-01");
+					txtFlightTime.setText("08:00:00");
+					txtFlightDuration.setText("00:00:00");
+					txtFlightTime.setText("00:00:00");
+					txtFlightCost.setText("Flight cost(0.00)");
+				}
 		 		
 		 	}
 		 });
@@ -283,6 +331,11 @@ public class TestGUI extends JFrame implements Database {
 		 gbc_lblPressTheOption.gridy = 3;
 		 panelEditFlights.add(lblPressTheOption, gbc_lblPressTheOption);
 		 
+		 /********************************************************************************
+		  * Removes flight from database
+		  * Pop up window prompts admin to enter flightnumber
+		  * Flight is removed from table when ok is pressed.
+		  ********************************************************************************/
 		 btnDeleteFlight = new JButton("Delete Flight");
 		 btnDeleteFlight.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
@@ -292,17 +345,15 @@ public class TestGUI extends JFrame implements Database {
 		 			String number = JOptionPane.showInputDialog(" Enter the Flight Number\n*THIS WILL PERMANENTLY REMOVE THE FLIGHT*");
 		 			int flightNum = Integer.parseInt(number);
 		 			deleteFlight(flightNum);
-		 		} catch (ClassNotFoundException e1) {
+		 		} catch (ClassNotFoundException e1) {//Flight number not in system
 		 			JOptionPane.showMessageDialog(null, "The specified flight number was not found:");	
 		 			
 		 		} catch (SQLException e1) {
-		 			JOptionPane.showMessageDialog(null, "Duplicate entry, Flight already exists");
+		 			JOptionPane.showMessageDialog(null, "Database error, check inputs");
 		 			
-		 		}catch(NullPointerException p){
+		 		}catch(RuntimeException r){
 		 			JOptionPane.showMessageDialog(null, "Flight number cannot be left blank");
 		 			
-		 		}catch(NumberFormatException n){
-		 			JOptionPane.showMessageDialog(null, "Flight number cannot be left blank");
 		 		}
 		 		
 		 		
@@ -321,8 +372,8 @@ public class TestGUI extends JFrame implements Database {
 		 GridBagLayout gbl_panelUserView_1 = new GridBagLayout();
 		 gbl_panelUserView_1.columnWidths = new int[]{130, 374, 0, 0, 0, 0};
 		 gbl_panelUserView_1.rowHeights = new int[]{29, 40, 29, 29, 29, 29, 179, 0};
-		 gbl_panelUserView_1.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		 gbl_panelUserView_1.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
+		 gbl_panelUserView_1.columnWeights = new double[]{0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		 gbl_panelUserView_1.rowWeights = new double[]{1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
 		 panelUserView_1.setLayout(gbl_panelUserView_1);
 		 
 		 GridBagConstraints gbc_btnDeleteFlight = new GridBagConstraints();
@@ -361,6 +412,11 @@ public class TestGUI extends JFrame implements Database {
 		 		panelSearchFlight.setVisible(true);
 		 	}
 		 });
+		 
+		 /************************************************************
+		  * Removes stored customer object from customer arraylist
+		  * Resets username and email field for next login
+		  ************************************************************/
 		 btnLogout = new JButton("Logout");
 		 btnLogout.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
@@ -368,6 +424,9 @@ public class TestGUI extends JFrame implements Database {
 		 		panelLogin.setVisible(true);
 		 		jtfUserLogin.setText("");
 		 		passwordField.setText("");
+		 		customerArray.clear();
+		 		c = null;
+		 		
 		 	}
 		 });
 		 GridBagConstraints gbc_btnLogout = new GridBagConstraints();
@@ -383,6 +442,12 @@ public class TestGUI extends JFrame implements Database {
 		 gbc_btnSearchFlights.gridx = 0;
 		 gbc_btnSearchFlights.gridy = 2;
 		 panelUserView_1.add(btnSearchFlights, gbc_btnSearchFlights);
+		 
+			/***********************************************************************************
+			 * Search Flight panel
+			 * Allows user to search for flights based on date, departure point, and destination
+			 * 	
+			 ***********************************************************************************/
 		 
 		 panelSearchFlight = new JPanel();
 		 panelSearchFlight.setVisible(false);
@@ -522,6 +587,8 @@ public class TestGUI extends JFrame implements Database {
 		 btnEditFlights.addActionListener(new ActionListener() {
 		 	public void actionPerformed(ActionEvent e) {
 		 		panelEditFlights.setVisible(true);
+		 		panelUserView_1.setVisible(false);
+		 		panelUserView_1.setEnabled(false);
 		 	}
 		 });
 		 btnEditFlights.setVisible(false);
@@ -610,6 +677,12 @@ public class TestGUI extends JFrame implements Database {
 				panelLogin.setVisible(false);
 			}
 		});
+		
+		/****************************************************************************************
+		 * Logs user in after checking if username and password match variable store in database
+		 * Creates a customer object and stores in customer arraylist
+		 * If admin logs in, the edit flight tab becomes visible and usable
+		 ****************************************************************************************/
 		JButton btnOk = new JButton("Ok");
 		btnOk.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -620,8 +693,12 @@ public class TestGUI extends JFrame implements Database {
 					if(login(userName,password)){
 						panelUserView_1.setVisible(true);
 						panelLogin.setVisible(false);
+						
 						if(isAdmin(userName)){
 							btnEditFlights.setVisible(true);
+						}else{
+							Customer c = getCustomerInfo(userName);
+							customerArray.add(c);
 						}
 						
 					}else{
@@ -629,6 +706,9 @@ public class TestGUI extends JFrame implements Database {
 					}
 					System.out.print(isAdmin(userName));
 				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (Exception e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
@@ -653,28 +733,32 @@ public class TestGUI extends JFrame implements Database {
 		gbc_btnResetPassword.gridy = 5;
 		panelLogin.add(btnResetPassword, gbc_btnResetPassword);
 		
-		/**Password text field for login window*/
-		/**Password text field*/
-		
-		
-		/**Ok button and listener for login page*/
-		
-		/**Logout button for main menu, returns user to login window*/
 	
-	/***********************************************************************************
-	 * Search Flight panel
-	 * Allows user to search for flights based on date, departure point, and destination
-	 * 	
-	 ***********************************************************************************/
-		Integer date = 0;
-		LocalTime time = LocalTime.now();
+	
+
 		
 		
 		
-		/**New User Label*/
+/**New user info label*******************************************************************************************/
 		
-		/**Create account button, login screen*/
+		/**User name text field*/
+		/**FirstName text field*/
+		/**Last Name Text field*/
+		/**Street Address Text Field*/
+		/**City Text Field*/
+		/**State Text Field*/
+		/**Security Question Text Field*/
+		/**Security Question Answer TextField*/
+		/**Email Address Text Field*/
 		
+		/**
+		 * Action Listener for create account button
+		 * Takes all text fields and converts value to string
+		 * Invokes the insertNewUser method from database interface to add user to database
+		 */
+		
+		/**Back button for new user page, takes back to login window*/
+		/***********************************************************************************************************/
 		
 	
 		
@@ -975,25 +1059,7 @@ public class TestGUI extends JFrame implements Database {
 		gbc_createNewUser.gridy = 15;
 		panelNewUser.add(createNewUser, gbc_createNewUser);
 		
-		/**New user info label*/
 		
-		/**User name text field*/
-		/**FirstName text field*/
-		/**Last Name Text field*/
-		/**Street Address Text Field*/
-		/**City Text Field*/
-		/**State Text Field*/
-		/**Security Question Text Field*/
-		/**Security Question Answer TextField*/
-		/**Email Address Text Field*/
-		
-		/**
-		 * Action Listener for create account button
-		 * Takes all text fields and converts value to string
-		 * Invokes the insertNewUser method from database interface to add user to database
-		 */
-		
-		/**Back button for new user page, takes back to login window*/
 		
 		/*******************************************************************************************
 		 * Reset password panel
@@ -1062,7 +1128,10 @@ public class TestGUI extends JFrame implements Database {
 						
 					}catch(NullPointerException n){
 						JOptionPane.showMessageDialog(null, "Please enter a valid username.");
-					}catch(Exception e1){
+					}catch(SQLException s){
+						JOptionPane.showMessageDialog(null, "The admin password can only be reset by a database administrator.");
+					} catch (Exception e1) {
+						// TODO Auto-generated catch block
 						e1.printStackTrace();
 					}
 			}
@@ -1093,6 +1162,8 @@ public class TestGUI extends JFrame implements Database {
 			public void actionPerformed(ActionEvent e) {
 				panelPasswordReset.setVisible(false);
 				panelLogin.setVisible(true);
+				textField_1.setText("");
+				
 			}
 		});
 		GridBagConstraints gbc_btnBack = new GridBagConstraints();
@@ -1100,9 +1171,51 @@ public class TestGUI extends JFrame implements Database {
 		gbc_btnBack.gridx = 1;
 		gbc_btnBack.gridy = 4;
 		panelPasswordReset.add(btnBack, gbc_btnBack);
+		
+		panelViewFlights = new JPanel();
+		getContentPane().add(panelViewFlights, "name_42262285748290");
+		GridBagLayout gbl_panelViewFlights = new GridBagLayout();
+		gbl_panelViewFlights.columnWidths = new int[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		gbl_panelViewFlights.rowHeights = new int[]{0, 0, 0, 0, 0, 30, 0};
+		gbl_panelViewFlights.columnWeights = new double[]{0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		gbl_panelViewFlights.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 1.0, Double.MIN_VALUE};
+		panelViewFlights.setLayout(gbl_panelViewFlights);
+		
+		list = new JList();
+		GridBagConstraints gbc_list = new GridBagConstraints();
+		gbc_list.gridheight = 4;
+		gbc_list.gridwidth = 11;
+		gbc_list.fill = GridBagConstraints.BOTH;
+		gbc_list.gridx = 1;
+		gbc_list.gridy = 2;
+		panelViewFlights.add(list, gbc_list);
+		
+		textField = new JTextField();
+		GridBagConstraints gbc_textField = new GridBagConstraints();
+		gbc_textField.anchor = GridBagConstraints.WEST;
+		gbc_textField.insets = new Insets(0, 0, 5, 5);
+		gbc_textField.gridx = 0;
+		gbc_textField.gridy = 3;
+		panelViewFlights.add(textField, gbc_textField);
+		textField.setColumns(10);
+		
+		btnNewButton_1 = new JButton("Book Flight");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GridBagConstraints gbc_btnNewButton_1 = new GridBagConstraints();
+		gbc_btnNewButton_1.insets = new Insets(0, 0, 5, 5);
+		gbc_btnNewButton_1.gridx = 0;
+		gbc_btnNewButton_1.gridy = 4;
+		panelViewFlights.add(btnNewButton_1, gbc_btnNewButton_1);
 
 
 		
 		
 	}
+
+
+
+	
 }
