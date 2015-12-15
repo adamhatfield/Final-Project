@@ -90,6 +90,25 @@ public class Customer extends Person implements Database {
 		flightNumber.add(0);
 		
 	}
+	public Customer(int newAccountNumber,String newUserName, String newPassword,String newEmail, String newFirstName, String newLastName, String newAddress, 
+			String newCity, String newState, int newZip,int newSSN,String newSecurityQuestion,String newAnswer, ArrayList<Integer> flightNum){
+		//why is there an accountNumber
+		//why is customer defining customer accountNumber?
+		super.setFirstName(newFirstName);
+		super.setLastName(newLastName);
+		super.setSSN(newSSN);
+		super.setAddress(newAddress);
+		super.setZipCode(newZip);
+		super.setCity(newCity);
+		super.setState(newState);
+		this.userName = newUserName;
+		this.password = newPassword;
+		this.emailAddress = newEmail;
+		this.accountNumber = newAccountNumber;
+		this.securityQuestion = newSecurityQuestion;
+		this.securityQuestionAnswer = newAnswer;
+		flightNumber=flightNum;
+	}
 	
 	
 	/***for bookflight**///////

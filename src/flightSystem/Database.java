@@ -44,14 +44,16 @@ public interface Database {
 			e.printStackTrace();
 		}
 	}
+	/*
 	default void insertNewUser(Customer customer) throws NumberFormatException{
 		
 		
 		/**Query that adds a user to the Customer table*/
+	/*
 		String query = "INSERT INTO CUSTOMER(CusAccountNumber,CusUserName,CusPassword,CusEmailAddress,CusFirstName,CusLastName,"
 				+ "CusAddress,CusCity,CusState,CusZip,CusSSN,CusSecurityQuestion,CusSecurityAnswer,FlightNumber) VALUE('"+customer.getAccountNumber()+"','"+customer.getUserName()+"','"+customer.getPassword()+"','"
 				+customer.getEmailAddress()+"','"+customer.getFirstName()+"','"+customer.getLastName()+"','"+customer.getAddress()+"','"+customer.getCity()+"','"
-				+customer.getState()+"','"+customer.getZipCode()+"','"+customer.getSSN()+"','"+customer.getSecurityQuestion()+"','"+customer.getSecurityQuestionAnswer()+"')";
+				+customer.getState()+"','"+customer.getZipCode()+"','"+customer.getSSN()+"','"+customer.getSecurityQuestion()+"','"+customer.getSecurityQuestionAnswer()+"','"+customer.flightNumber.get(0)+"')";
 		try{
 			Connection connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/flightsystem",USER,PASSWORD);
 			Statement s = connection.createStatement();
@@ -64,7 +66,7 @@ public interface Database {
 		}
 	}
 	
-	
+	*/
 	/**Method that logs user into flight system main menu*/
 	default boolean login(String userName, String password){
 		/**Query that checks database for username and password based on textfield entry*/

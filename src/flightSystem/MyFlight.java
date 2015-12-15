@@ -52,9 +52,10 @@ public static void myFlight() throws Exception{
 			System.out.println("Enter in Security Question Answer");
 			String aw=input.nextLine();
 			Customer c = new Customer(us,pass,ema,fn,ln,ad,cc,st,zip,sss,ssq,aw);
-			Customer.setLogin(us);
+			Customer.setLogin(us);//thru that method login should become active
+			Database.insertNewUser(c, 0);//0 for new users
+			xx=2;
 			
-			//thru that method login should become active
 			//then think popup
 		}
 		if(xx==2){
